@@ -5,10 +5,10 @@ the online live demo. Real multi-phone SOCKS5 bonding runs locally on the user's
 """
 
 from __future__ import annotations
+import mimetypes
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
     title="BoostNet Bandwidth Aggregation Engine",
@@ -16,25 +16,45 @@ app = FastAPI(
     version="2.0.0",
 )
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-FRONTEND_DIR = BASE_DIR / "frontend"
-
-if FRONTEND_DIR.exists():
-    app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
-    if (FRONTEND_DIR / "css").exists():
-        app.mount("/css", StaticFiles(directory=str(FRONTEND_DIR / "css")), name="css")
-    if (FRONTEND_DIR / "js").exists():
-        app.mount("/js", StaticFiles(directory=str(FRONTEND_DIR / "js")), name="js")
-
-
-@app.get("/", response_class=HTMLResponse)
-async def serve_index():
-    index_file = FRONTEND_DIR / "index.html"
-    if index_file.exists():
-        return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
-    return HTMLResponse("<h1>BoostNet Engine Active</h1>")
+CURRENT_DIR = Path(__file__).resolve().parent
+FRONTEND_DIRS = [
+    CURRENT_DIR / "frontend",
+    CURRENT_DIR.parent / "frontend",
+    Path("frontend"),
+    Path("/var/task/frontend"),
+    Path("/var/task/api/frontend"),
+]
 
 
+def find_frontend_file(rel_path: str) -> Path | None:
+    clean_path = rel_path.lstrip("/")
+    if clean_path.startswith("static/"):
+        clean_path = clean_path[7:]
+
+    for base in FRONTEND_DIRS:
+        candidate = base / clean_path
+        if candidate.exists() and candidate.is_file():
+            return candidate
+    return None
+
+
+def get_index_html() -> str:
+    for base in FRONTEND_DIRS:
+        index_file = base / "index.html"
+        if index_file.exists():
+            return index_file.read_text(encoding="utf-8")
+    return "<h1>BoostNet Cloud Showcase Active</h1>"
+
+
+# 1. Root & Vercel rewrite endpoints
+@app.get("/")
+@app.get("/api")
+@app.get("/api/index.py")
+async def serve_root():
+    return HTMLResponse(content=get_index_html())
+
+
+# 2. API Endpoints
 @app.get("/api/v1/pairing-qr")
 async def get_pairing_qr():
     return {
@@ -55,3 +75,14 @@ async def toggle_virtual_nodes():
 @app.post("/api/v1/downloads")
 async def start_download():
     return {"status": "ok", "message": "Cloud showcase simulation active"}
+
+
+# 3. Static Assets & Catch-all route
+@app.get("/{full_path:path}")
+async def serve_static_or_fallback(full_path: str):
+    file_match = find_frontend_file(full_path)
+    if file_match:
+        mime_type, _ = mimetypes.guess_type(str(file_match))
+        return FileResponse(file_match, media_type=mime_type or "application/octet-stream")
+
+    return HTMLResponse(content=get_index_html())
