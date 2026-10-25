@@ -343,35 +343,33 @@ class BoostNetApp {
     }
 
     async openQrModal() {
+        const imgEl = document.getElementById("qr-modal-image");
+        const pinEl = document.getElementById("qr-modal-pin");
+        const ssidEl = document.getElementById("qr-modal-ssid");
+        const passEl = document.getElementById("qr-modal-pass");
+        const uriEl = document.getElementById("qr-modal-uri");
+
+        if (pinEl) pinEl.innerText = "bn_demo_84920481";
+        if (ssidEl) ssidEl.innerText = "BoostNet-College-Hotspot";
+        if (passEl) passEl.innerText = "boostnet2026";
+        if (uriEl) uriEl.innerText = "boostnet://pair?token=bn_demo_84920481&host=192.168.137.1&port=9050";
+
+        document.getElementById("qr-pairing-modal").classList.add("active");
+
         try {
             const res = await fetch("/api/v1/pairing-qr");
-            const data = await res.json();
-
-            const imgEl = document.getElementById("qr-modal-image");
-            const pinEl = document.getElementById("qr-modal-pin");
-            const ssidEl = document.getElementById("qr-modal-ssid");
-            const passEl = document.getElementById("qr-modal-pass");
-            const uriEl = document.getElementById("qr-modal-uri");
-
-            if (imgEl) imgEl.src = data.qr_image_data_url;
-            if (pinEl) pinEl.innerText = data.session_token;
-            if (ssidEl) ssidEl.innerText = data.ssid;
-            if (passEl) passEl.innerText = data.password;
-            if (uriEl) uriEl.innerText = data.pairing_uri;
-
-            document.getElementById("qr-pairing-modal").classList.add("active");
+            if (res.ok) {
+                const data = await res.json();
+                if (imgEl && data.qr_image_data_url) {
+                    imgEl.src = data.qr_image_data_url;
+                }
+                if (pinEl && data.session_token) pinEl.innerText = data.session_token;
+                if (ssidEl && data.ssid) ssidEl.innerText = data.ssid;
+                if (passEl && data.password) passEl.innerText = data.password;
+                if (uriEl && data.pairing_uri) uriEl.innerText = data.pairing_uri;
+            }
         } catch (e) {
             console.warn("Using demo QR pairing payload on cloud showcase");
-            const pinEl = document.getElementById("qr-modal-pin");
-            const ssidEl = document.getElementById("qr-modal-ssid");
-            const passEl = document.getElementById("qr-modal-pass");
-            const uriEl = document.getElementById("qr-modal-uri");
-
-            if (pinEl) pinEl.innerText = "bn_demo_84920481";
-            if (ssidEl) ssidEl.innerText = "BoostNet-College-Hotspot";
-            if (passEl) passEl.innerText = "boostnet2026";
-            if (uriEl) uriEl.innerText = "boostnet://pair?token=bn_demo_84920481&host=192.168.137.1&port=9050";
-            document.getElementById("qr-pairing-modal").classList.add("active");
         }
     }
 
