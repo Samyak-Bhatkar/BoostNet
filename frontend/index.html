@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BoostNet | Multi-Mobile Bandwidth Aggregation Engine</title>
+    <meta name="description" content="Peer-to-peer mobile bandwidth aggregation, parallel HTTP byte-range accelerator, and intelligent session-striping proxy for college laptops (UN SDG 9)"/>
+    <meta name="theme-color" content="#000000"/>
+    <link rel="stylesheet" href="/static/css/styles-main.css"/>
+</head>
+<body>
+    <!-- Concentric Radar Background (PairDrop Lineage) -->
+    <canvas id="radar-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="brand">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"></path>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1>BoostNet <span class="tag">SDG 9</span></h1>
+                <p>Multi-Mobile Bandwidth Aggregator</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <!-- 1-Click Virtual Lab Simulation Toggle -->
+            <button class="action-pill" id="btn-toggle-sim" title="Spawn or kill 3 simulated Airtel/Jio/Vi mobile phones">
+                ⚡ Simulate 3 Phones
+            </button>
+
+            <!-- SOCKS5 Proxy Status Pill -->
+            <div class="action-pill active" title="Local SOCKS5 / HTTP Proxy listening on 127.0.0.1:9050">
+                <span class="status-dot"></span>
+                <span>Proxy :9050 ON</span>
+            </div>
+
+            <!-- QR Code Pairing Button -->
+            <button class="icon-btn" id="btn-pairing-qr" title="Scan QR Code from Android Phone">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 4h6v6H4V4zm2 2v2h2V6H6zm8-2h6v6h-6V4zm2 2v2h2V6h-2zM4 14h6v6H4v-6zm2 2v2h2v-2H6zm10 0h2v2h-2v-2zm-2-2h2v2h-2v-2zm4 4h2v2h-2v-2zm-2 2h2v2h-2v-2zm4-2h2v2h-2v-2z"></path>
+                </svg>
+            </button>
+
+            <!-- Info / About Button -->
+            <button class="icon-btn" id="btn-about" title="Architecture & Open-Source Lineage">
+                <svg viewBox="0 0 24 24">
+                    <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Radar Center Stage -->
+    <div id="radar-container">
+        <!-- Center Host Node (You / Laptop Host) -->
+        <div id="center-host-node">
+            <div class="host-icon-wrapper">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"></path>
+                </svg>
+            </div>
+            <div class="host-speed-label" id="host-combined-speed">0.0 <small>Mbps ▲</small></div>
+            <div class="host-boost-pill" id="host-boost-multiplier">1.0x Boost</div>
+            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 2px;" id="host-active-count">0 Active Nodes</div>
+        </div>
+
+        <!-- Orbiting Mobile Peer Nodes Container -->
+        <div id="orbiting-peers-container"></div>
+
+        <!-- Empty State Notice -->
+        <div id="empty-peers-notice">
+            <h3>No Mobile Nodes Connected</h3>
+            <p>Scan the QR code on an Android phone or click <strong>"Simulate 3 Phones"</strong> to aggregate bandwidth.</p>
+        </div>
+    </div>
+
+    <!-- Bottom Slide-Up Telemetry Drawer (PairDrop-Style Panel) -->
+    <div id="telemetry-drawer">
+        <div class="drawer-header">
+            <div class="drawer-tabs">
+                <button class="tab-btn active" data-tab="downloader">
+                    ⚡ Turbo Range Downloader (Approach A)
+                </button>
+                <button class="tab-btn" data-tab="stream">
+                    🎥 Stream Accelerator (Ring Buffer)
+                </button>
+                <button class="tab-btn" data-tab="proxy">
+                    🌐 Session Proxy Matrix (Approach B)
+                </button>
+            </div>
+            <svg class="drawer-toggle-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
+            </svg>
+        </div>
+
+        <div class="drawer-content">
+            <!-- Tab 1: Turbo Downloader UI -->
+            <div class="tab-pane active" id="tab-downloader">
+                <div class="download-controls">
+                    <div class="input-group">
+                        <input type="text" id="download-url-input" placeholder="Paste file download URL (or pick a test preset below)..." value="http://127.0.0.1:9055/test-32mb.bin"/>
+                    </div>
+                    <button class="btn-primary" id="btn-start-download">
+                        ⚡ Turbo Download
+                    </button>
+                </div>
+
+                <!-- Quick Presets for Demo & Testing -->
+                <div class="quick-presets">
+                    <span>Quick Test Presets:</span>
+                    <button class="preset-chip" data-url="http://127.0.0.1:9055/test-16mb.bin">16 MB Mock CDN</button>
+                    <button class="preset-chip" data-url="http://127.0.0.1:9055/test-32mb.bin">32 MB Mock CDN</button>
+                    <button class="preset-chip" data-url="http://127.0.0.1:9055/test-64mb.bin">64 MB Mock CDN</button>
+                    <button class="preset-chip" data-url="http://127.0.0.1:9055/signed-ip-locked.bin">Signed IP-Locked 403 Test</button>
+                </div>
+
+                <!-- Active Download Telemetry & 64-Block Visualizer -->
+                <div class="chunk-map-card">
+                    <div class="chunk-map-header">
+                        <h4>
+                            <span id="dl-current-filename">ubuntu-24.04-dataset.iso</span>
+                            <span style="color:var(--text-muted); font-size: 0.75rem;" id="dl-stats-text">Ready</span>
+                        </h4>
+                        <div class="chunk-telemetry-badge" id="dl-current-speed">0.0 Mbps (ETA: --)</div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div style="height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; margin-bottom: 12px;">
+                        <div id="dl-progress-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-emerald), var(--accent-cyan)); transition: width 0.3s ease;"></div>
+                    </div>
+
+                    <!-- 64-Block aria2 Chunk Map Grid -->
+                    <div class="chunk-grid" id="chunk-grid"></div>
+
+                    <!-- Legend & SHA-256 Checksum -->
+                    <div class="chunk-legend">
+                        <div class="legend-item"><span class="legend-dot" style="background:#06b6d4;"></span> Rahul's Moto (Airtel 5G)</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#10b981;"></span> Priya's Samsung (Jio 4G)</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#8b5cf6;"></span> Aman's Vivo (Vi 4G)</div>
+                        <div class="legend-item"><span class="legend-dot" style="background:#1e293b;"></span> Queued Chunks</div>
+                        <div style="margin-left: auto;" id="dl-sha256-text">SHA-256: <code>Idle</code></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Stream Accelerator UI -->
+            <div class="tab-pane" id="tab-stream">
+                <div class="download-controls">
+                    <div class="input-group">
+                        <input type="text" id="stream-url-input" placeholder="Paste YouTube or video stream URL for multi-phone look-ahead prefetch..." value="http://127.0.0.1:9055/test-16mb.bin"/>
+                    </div>
+                    <button class="btn-primary" id="btn-start-stream">
+                        🎥 Accelerate Stream
+                    </button>
+                </div>
+
+                <div class="stream-grid">
+                    <div class="stream-player-card">
+                        <div class="video-container">
+                            <video id="stream-video-player" controls preload="metadata"></video>
+                        </div>
+                        <div style="padding: 10px; font-size: 0.75rem; color: var(--text-muted);">
+                            Piping 1MB byte-range segments via Multi-Phone Sliding Window Ring Buffer.
+                        </div>
+                    </div>
+
+                    <div class="ring-buffer-card">
+                        <h4 style="font-size: 0.85rem; margin-bottom: 8px;">Sliding Window Look-Ahead Prefetch Buffer</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Upcoming 1 MB media segments pre-fetched in parallel across all mobile nodes:</p>
+
+                        <div class="ring-buffer-visualizer">
+                            <div class="buffer-slot" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">
+                                <span>Seg #0</span>
+                                <strong>Airtel</strong>
+                            </div>
+                            <div class="buffer-slot" style="border-color: var(--accent-emerald); color: var(--accent-emerald);">
+                                <span>Seg #1</span>
+                                <strong>Jio</strong>
+                            </div>
+                            <div class="buffer-slot" style="border-color: var(--accent-violet); color: var(--accent-violet);">
+                                <span>Seg #2</span>
+                                <strong>Vi</strong>
+                            </div>
+                            <div class="buffer-slot" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">
+                                <span>Seg #3</span>
+                                <strong>Airtel</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.5;">
+                            ⚡ <strong>QUIC Fallback:</strong> SOCKS5 server rejects UDP ASSOCIATE with <code>0x07</code>, seamlessly forcing Chrome from QUIC to TCP for parallel aggregation without touching <code>chrome://flags</code>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Session Proxy Matrix UI -->
+            <div class="tab-pane" id="tab-proxy">
+                <!-- Coupled Bottleneck / Same-Tower Congestion Banner -->
+                <div class="congestion-alert-banner" id="congestion-banner" style="display: none;">
+                    ⚠️ Shared Tower Bottleneck Detected (Jio SIMs) — Airtime Contention Mitigation Active
+                </div>
+
+                <div class="session-table-wrapper">
+                    <table class="session-table">
+                        <thead>
+                            <tr>
+                                <th>Target Host</th>
+                                <th>Carrier / Node</th>
+                                <th>Routing Type</th>
+                                <th>Data Transferred</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="session-table-body">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted);">
+                                    No active proxy sessions (:9050). Open Chrome or run pip install to see traffic.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Pairing Modal (PairDrop Style) -->
+    <div class="modal-overlay" id="qr-pairing-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Pair Android Phone</h3>
+                <button class="icon-btn modal-close-btn" style="width: 32px; height: 32px;">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-qr-container">
+                    <div class="qr-image-wrapper">
+                        <img id="qr-modal-image" alt="Pairing QR Code"/>
+                    </div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-emerald);">
+                        Session PIN: <span id="qr-modal-pin">8f4a2e</span>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; background: var(--surface-2); padding: 12px; border-radius: 8px;">
+                    <div><strong>Wi-Fi SSID:</strong> <span id="qr-modal-ssid">BoostNet_Hotspot</span></div>
+                    <div><strong>Password:</strong> <span id="qr-modal-pass">boostnet2026</span></div>
+                    <div style="margin-top: 6px; font-size: 0.72rem; color: var(--text-muted); word-break: break-all;">
+                        URI: <code id="qr-modal-uri">boostnet://pair?...</code>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Node Details & Donor Trust Modal -->
+    <div class="modal-overlay" id="node-details-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-node-title">Rahul's Moto G45 (Airtel 5G)</h3>
+                <button class="icon-btn modal-close-btn" style="width: 32px; height: 32px;">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+                    <div><strong>Local Socket:</strong> <span id="modal-node-ip">192.168.43.102:1080</span></div>
+                    <div><strong>Speed / Latency:</strong> <span id="modal-node-speed">3.2 Mbps</span> (<span id="modal-node-rtt">25ms</span>)</div>
+                    <div><strong>Data Used:</strong> <span id="modal-node-used">112 / 250 MB (44.8%)</span></div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
+                        <span>Hard Data Cap Allowance</span>
+                        <strong id="label-node-data-cap" style="color: var(--accent-emerald);">250 MB</strong>
+                    </div>
+                    <input type="range" id="slider-node-data-cap" min="20" max="1000" step="10" value="250" style="width: 100%; accent-color: var(--accent-emerald);"/>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
+                        <span>Battery Safety Cutoff</span>
+                        <strong id="label-node-battery-cutoff" style="color: var(--accent-rose);">25%</strong>
+                    </div>
+                    <input type="range" id="slider-node-battery-cutoff" min="10" max="50" step="5" value="25" style="width: 100%; accent-color: var(--accent-rose);"/>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-secondary" id="btn-drain-node" style="flex: 1;">Drain & Pause Node</button>
+                    <button class="btn-secondary" id="btn-evict-node" style="color: var(--accent-rose); border-color: rgba(244,63,94,0.3);">Evict Node</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary modal-close-btn">Cancel</button>
+                <button class="btn-primary" id="btn-save-node-limits">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About & Open-Source Lineage Modal -->
+    <div class="modal-overlay" id="about-modal">
+        <div class="modal-card" style="max-width: 640px;">
+            <div class="modal-header">
+                <h3>About BoostNet Architecture</h3>
+                <button class="icon-btn modal-close-btn" style="width: 32px; height: 32px;">✕</button>
+            </div>
+            <div class="modal-body" style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 12px;">
+                    <strong>BoostNet</strong> aggregates cellular data connections across nearby mobile devices using local Wi-Fi mesh networking and dynamic micro-chunk multiplexing, delivering multi-carrier throughput to college laptops without requiring paid cloud servers or USB cables.
+                </p>
+
+                <h4 style="color: var(--text-primary); margin-bottom: 8px;">Open-Source Architecture Lineage:</h4>
+                <table style="width: 100%; font-size: 0.75rem; border-collapse: collapse; margin-bottom: 16px;">
+                    <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-muted);">
+                        <th style="padding: 6px 0;">Repository</th>
+                        <th>Architectural Pattern Implemented in BoostNet</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 6px 0; color: var(--accent-cyan); font-weight: 600;">schlagmichdoch/PairDrop</td>
+                        <td>Concentric pulsing radar canvas geometry, polar peer avatars, pure black AMOLED theme</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 6px 0; color: var(--accent-emerald); font-weight: 600;">go-dispatch-proxy</td>
+                        <td>Contention-ratio weighted round-robin scheduling, zero-copy async stream pipes</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 6px 0; color: var(--accent-violet); font-weight: 600;">aria2/aria2</td>
+                        <td>Dynamic Split & In-Flight Work-Stealing ("Split-in-Half" straggler elimination)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 0; color: var(--accent-amber); font-weight: 600;">Visible-Wifi-Cellular</td>
+                        <td>Android dual-transport binding (WifiNetworkSpecifier + TRANSPORT_CELLULAR socketFactory)</td>
+                    </tr>
+                </table>
+
+                <p style="font-size: 0.72rem; color: var(--text-muted);">
+                    Aligned with UN SDG 9 (Industry, Innovation, and Infrastructure) to bridge the digital connectivity gap in low-bandwidth educational institutions.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary modal-close-btn">Got It</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/radar-canvas.js"></script>
+    <script src="/static/js/chunk-visualizer.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

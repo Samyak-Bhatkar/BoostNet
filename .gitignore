@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Pytest / Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# BoostNet Runtime Assets & Downloads
+downloads/
+*.bin
+*.part
+
+# Upstream reference archives
+Pairdrop.zip
+pairdrop_extracted/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
