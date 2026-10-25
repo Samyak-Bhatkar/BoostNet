@@ -1,7 +1,5 @@
-# Ignore backend and Python files so Vercel builds a pure, fast static frontend showcase
 backend/
 main.py
-requirements.txt
 tests/
 android-donor-app/
 chrome-extension/
