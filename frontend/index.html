@@ -6,7 +6,1037 @@
     <title>BoostNet | Multi-Mobile Bandwidth Aggregation Engine</title>
     <meta name="description" content="Peer-to-peer mobile bandwidth aggregation, parallel HTTP byte-range accelerator, and intelligent session-striping proxy for college laptops (UN SDG 9)"/>
     <meta name="theme-color" content="#000000"/>
-    <link rel="stylesheet" href="/static/css/styles-main.css"/>
+    <style>
+/* BoostNet Main Stylesheet - Pure Black #000000 AMOLED Theme
+   PairDrop Visual DNA (90-95% Lineage) + UN SDG 9 High-Performance Design
+*/
+
+:root {
+    --bg-black: #000000;
+    --surface-1: #0a0a0c;
+    --surface-2: #121316;
+    --surface-3: #1a1c23;
+    --border-subtle: #262933;
+    --border-accent: #333846;
+
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    --accent-emerald: #10b981;
+    --accent-cyan: #06b6d4;
+    --accent-violet: #8b5cf6;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+    --accent-blue: #3b82f6;
+
+    --radar-ring-color: rgba(16, 185, 129, 0.12);
+    --radar-pulse-color: rgba(6, 182, 212, 0.08);
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-black);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Radar Canvas (PairDrop Lineage) */
+#radar-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Header */
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+    background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+    backdrop-filter: blur(8px);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.brand-logo svg {
+    width: 22px;
+    height: 22px;
+    fill: #000;
+}
+
+.brand-text h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-text h1 span.tag {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    font-weight: 600;
+}
+
+.brand-text p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Top Right Action Icons */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.action-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-pill:hover {
+    background: var(--surface-3);
+    border-color: var(--border-accent);
+    color: var(--text-primary);
+}
+
+.action-pill.active {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: var(--accent-emerald);
+}
+
+.action-pill .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 8px var(--accent-emerald);
+    animation: pulse-dot 2s infinite;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: var(--surface-3);
+    border-color: var(--border-accent);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Radar Center Area */
+#radar-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+/* Center Node (You / Laptop Host) */
+#center-host-node {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--surface-2) 0%, var(--surface-1) 80%);
+    border: 2px solid rgba(6, 182, 212, 0.4);
+    box-shadow: 0 0 35px rgba(6, 182, 212, 0.25), inset 0 0 20px rgba(6, 182, 212, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    cursor: default;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#center-host-node:hover {
+    transform: scale(1.05);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 45px rgba(6, 182, 212, 0.4);
+}
+
+.host-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(6, 182, 212, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.host-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--accent-cyan);
+}
+
+.host-speed-label {
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.host-speed-label small {
+    font-size: 0.7rem;
+    color: var(--accent-cyan);
+}
+
+.host-boost-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-emerald);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin-top: 3px;
+}
+
+/* Orbiting Peer Nodes */
+.peer-node {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--surface-1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 12;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.peer-node:hover {
+    transform: scale(1.08) translate(-50%, -50%) !important;
+}
+
+.peer-svg-ring {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 130px;
+    height: 130px;
+    transform: rotate(-90deg);
+    pointer-events: none;
+}
+
+.peer-svg-ring circle.bg {
+    fill: none;
+    stroke: var(--surface-3);
+    stroke-width: 4;
+}
+
+.peer-svg-ring circle.progress {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.peer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-2);
+    margin-bottom: 4px;
+}
+
+.peer-avatar svg {
+    width: 20px;
+    height: 20px;
+}
+
+.peer-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.peer-carrier {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+}
+
+.peer-speed-badge {
+    position: absolute;
+    bottom: -12px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    white-space: nowrap;
+}
+
+/* Empty State / No Peers */
+#empty-peers-notice {
+    position: absolute;
+    top: 68%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#empty-peers-notice h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+#empty-peers-notice p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* Bottom Slide-Up Telemetry Drawer */
+#telemetry-drawer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 12, 0.94);
+    border-top: 1px solid var(--border-subtle);
+    backdrop-filter: blur(20px);
+    z-index: 30;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(calc(100% - 54px));
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+#telemetry-drawer.expanded {
+    transform: translateY(0);
+}
+
+.drawer-header {
+    height: 54px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.drawer-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-2);
+}
+
+.tab-btn.active {
+    color: var(--text-primary);
+    background: var(--surface-3);
+    border: 1px solid var(--border-accent);
+}
+
+.drawer-toggle-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+#telemetry-drawer.expanded .drawer-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.drawer-content {
+    padding: 20px 24px;
+    overflow-y: auto;
+    min-height: 280px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Tab 1: Turbo Downloader UI */
+.download-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.input-group:focus-within {
+    border-color: var(--accent-emerald);
+}
+
+.input-group input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.btn-primary {
+    padding: 0 24px;
+    background: var(--accent-emerald);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #34d399;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+.quick-presets {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.quick-presets span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.preset-chip {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.preset-chip:hover {
+    background: var(--surface-3);
+    color: var(--text-primary);
+    border-color: var(--border-accent);
+}
+
+/* 64-Block Chunk Map (aria2 Lineage) */
+.chunk-map-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.chunk-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.chunk-map-header h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chunk-telemetry-badge {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--accent-emerald);
+}
+
+.chunk-grid {
+    display: grid;
+    grid-template-columns: repeat(32, 1fr);
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.chunk-block {
+    height: 18px;
+    border-radius: 3px;
+    background: #1e293b;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.chunk-block.completed {
+    box-shadow: 0 0 6px currentColor;
+}
+
+.chunk-block.downloading {
+    animation: pulse-block 1s infinite alternate;
+}
+
+.chunk-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+}
+
+/* Tab 2: Stream Accelerator UI */
+.stream-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.stream-player-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-container {
+    width: 100%;
+    height: 220px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    outline: none;
+}
+
+.ring-buffer-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.ring-buffer-visualizer {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.buffer-slot {
+    flex: 1;
+    height: 48px;
+    border-radius: 8px;
+    background: var(--surface-3);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-family: var(--font-mono);
+}
+
+/* Tab 3: Session Proxy Matrix UI */
+.session-table-wrapper {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+table.session-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    text-align: left;
+}
+
+table.session-table th {
+    padding: 10px 14px;
+    background: var(--surface-3);
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+table.session-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.badge-striped {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-emerald);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.badge-sticky {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--accent-violet);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.congestion-alert-banner {
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: var(--accent-amber);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Modals (PairDrop Style) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    width: 90%;
+    max-width: 480px;
+    background: var(--surface-1);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    animation: modal-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.qr-image-wrapper {
+    padding: 12px;
+    background: #000;
+    border: 2px solid var(--accent-emerald);
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.qr-image-wrapper img {
+    width: 190px;
+    height: 190px;
+    display: block;
+}
+
+.modal-footer {
+    padding: 14px 20px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-secondary {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: var(--surface-3);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    color: var(--text-primary);
+    border-color: var(--border-accent);
+}
+
+/* Animations */
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+@keyframes pulse-block {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+@keyframes modal-enter {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+/* Responsive Mobile & AMOLED Hardening (UN SDG 9 Mobile-First Experience) */
+svg {
+    max-width: 100%;
+}
+
+.brand-logo svg {
+    width: 22px !important;
+    height: 22px !important;
+    max-width: 22px !important;
+    max-height: 22px !important;
+    fill: #000000 !important;
+}
+
+@media (max-width: 768px) {
+    header {
+        height: auto;
+        min-height: 56px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .brand-text h1 {
+        font-size: 1rem;
+    }
+
+    .brand-text p {
+        display: none;
+    }
+
+    .header-actions {
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .action-pill {
+        padding: 6px 10px;
+        font-size: 0.72rem;
+    }
+
+    #center-host-node {
+        width: 110px;
+        height: 110px;
+    }
+
+    .host-icon-wrapper {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 2px;
+    }
+
+    .host-icon-wrapper svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .host-speed-label {
+        font-size: 0.95rem;
+    }
+
+    .host-boost-pill {
+        font-size: 0.58rem;
+        padding: 1px 6px;
+    }
+
+    .peer-node {
+        width: 86px;
+        height: 86px;
+    }
+
+    .peer-svg-ring {
+        width: 96px;
+        height: 96px;
+        top: -5px;
+        left: -5px;
+    }
+
+    .peer-svg-ring circle {
+        cx: 48;
+        cy: 48;
+        r: 41;
+    }
+
+    .peer-avatar {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 2px;
+    }
+
+    .peer-avatar svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .peer-name {
+        font-size: 0.62rem;
+        max-width: 70px;
+    }
+
+    .peer-carrier {
+        font-size: 0.55rem;
+    }
+
+    .peer-speed-badge {
+        font-size: 0.55rem;
+        padding: 2px 6px;
+        bottom: -10px;
+    }
+
+    #empty-peers-notice {
+        top: 62%;
+        padding: 0 16px;
+    }
+
+    #empty-peers-notice h3 {
+        font-size: 0.85rem;
+    }
+
+    #empty-peers-notice p {
+        font-size: 0.72rem;
+    }
+
+    .drawer-header {
+        height: 48px;
+        padding: 0 12px;
+    }
+
+    .drawer-tabs {
+        overflow-x: auto;
+        gap: 4px;
+        scrollbar-width: none;
+    }
+
+    .drawer-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-btn {
+        padding: 6px 10px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+    }
+
+    .drawer-content {
+        padding: 14px 12px;
+    }
+
+    .chunk-grid {
+        grid-template-columns: repeat(16, 1fr);
+        gap: 3px;
+    }
+
+    .chunk-block {
+        height: 14px;
+    }
+
+    .download-controls {
+        flex-direction: column;
+    }
+
+    .btn-primary {
+        justify-content: center;
+        height: 40px;
+    }
+
+    .stream-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+    </style>
 </head>
 <body>
     <!-- Concentric Radar Background (PairDrop Lineage) -->
@@ -15,8 +1045,8 @@
     <!-- Header Navigation -->
     <header>
         <div class="brand">
-            <div class="brand-logo">
-                <svg viewBox="0 0 24 24">
+            <div class="brand-logo" style="width: 38px; height: 38px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" style="width: 22px; height: 22px; fill: #000000;">
                     <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"></path>
                 </svg>
             </div>
@@ -32,6 +1062,11 @@
                 ⚡ Simulate 3 Phones
             </button>
 
+            <!-- Mobile Phone Guide Pill -->
+            <button class="action-pill" id="btn-mobile-guide" title="How to use BoostNet on your phone">
+                📱 Mobile Setup
+            </button>
+
             <!-- SOCKS5 Proxy Status Pill -->
             <div class="action-pill active" title="Local SOCKS5 / HTTP Proxy listening on 127.0.0.1:9050">
                 <span class="status-dot"></span>
@@ -40,14 +1075,14 @@
 
             <!-- QR Code Pairing Button -->
             <button class="icon-btn" id="btn-pairing-qr" title="Scan QR Code from Android Phone">
-                <svg viewBox="0 0 24 24">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M4 4h6v6H4V4zm2 2v2h2V6H6zm8-2h6v6h-6V4zm2 2v2h2V6h-2zM4 14h6v6H4v-6zm2 2v2h2v-2H6zm10 0h2v2h-2v-2zm-2-2h2v2h-2v-2zm4 4h2v2h-2v-2zm-2 2h2v2h-2v-2zm4-2h2v2h-2v-2z"></path>
                 </svg>
             </button>
 
             <!-- Info / About Button -->
             <button class="icon-btn" id="btn-about" title="Architecture & Open-Source Lineage">
-                <svg viewBox="0 0 24 24">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>
                 </svg>
             </button>
@@ -59,7 +1094,7 @@
         <!-- Center Host Node (You / Laptop Host) -->
         <div id="center-host-node">
             <div class="host-icon-wrapper">
-                <svg viewBox="0 0 24 24">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"></path>
                 </svg>
             </div>
@@ -92,7 +1127,7 @@
                     🌐 Session Proxy Matrix (Approach B)
                 </button>
             </div>
-            <svg class="drawer-toggle-icon" viewBox="0 0 24 24" fill="currentColor">
+            <svg class="drawer-toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
             </svg>
         </div>
@@ -230,6 +1265,44 @@
         </div>
     </div>
 
+    <!-- Mobile Setup Guide Modal -->
+    <div class="modal-overlay" id="mobile-guide-modal">
+        <div class="modal-card" style="max-width: 580px;">
+            <div class="modal-header">
+                <h3>📱 How to Use BoostNet on Mobile</h3>
+                <button class="icon-btn modal-close-btn" style="width: 32px; height: 32px;">✕</button>
+            </div>
+            <div class="modal-body" style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 12px;">
+                    BoostNet bonds multiple phones (Airtel + Jio + Vi) into one unified broadband pipe for your college laptop, bypassing library congestion without cables or root access.
+                </p>
+
+                <h4 style="color: var(--accent-emerald); margin-bottom: 6px;">How It Works:</h4>
+                <ol style="padding-left: 20px; margin-bottom: 14px;">
+                    <li style="margin-bottom: 6px;">
+                        <strong>Step 1 — Connect to Local Wi-Fi:</strong> Keep your laptop and phones on the same Wi-Fi (e.g. laptop hotspot or dorm router).
+                    </li>
+                    <li style="margin-bottom: 6px;">
+                        <strong>Step 2 — Scan Pairing QR:</strong> Click the <strong>QR Code</strong> button in the header from your laptop, and scan the QR code using your phone's camera.
+                    </li>
+                    <li style="margin-bottom: 6px;">
+                        <strong>Step 3 — Dual-Transport Binding:</strong> The BoostNet mobile worker keeps local Wi-Fi active for laptop talk while routing download chunks over cellular (4G/5G).
+                    </li>
+                    <li style="margin-bottom: 6px;">
+                        <strong>Step 4 — Donor Trust Limits:</strong> Set custom limits directly from the dashboard: e.g. maximum 250 MB data cap and pause if phone battery drops below 25%.
+                    </li>
+                </ol>
+
+                <div style="background: var(--surface-2); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 10px; font-size: 0.75rem;">
+                    💡 <strong>Live Cloud Showcase:</strong> When viewing on Vercel, click <strong>"⚡ Simulate 3 Phones"</strong> or <strong>"⚡ Turbo Download"</strong> to watch the multi-carrier aggregation demo right in your browser!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary modal-close-btn">Understood</button>
+            </div>
+        </div>
+    </div>
+
     <!-- QR Code Pairing Modal (PairDrop Style) -->
     <div class="modal-overlay" id="qr-pairing-modal">
         <div class="modal-card">
@@ -348,9 +1421,935 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="/static/js/radar-canvas.js"></script>
-    <script src="/static/js/chunk-visualizer.js"></script>
-    <script src="/static/js/app.js"></script>
+    <!-- Self-Contained Zero-Dependency Scripts -->
+    <script>
+/**
+ * BoostNet Concentric Radar Canvas Engine
+ * Direct architectural lineage: schlagmichdoch/PairDrop canvas-worker.js
+ * Renders smooth pulsing concentric radar rings with AMOLED emerald glow.
+ */
+
+class RadarCanvas {
+    constructor(canvasId = "radar-canvas") {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext("2d");
+
+        this.baseColor = "16, 185, 129"; // Emerald RGB
+        this.baseOpacity = 0.18;
+        this.speed = 1.0;
+        this.animate = true;
+        this.currentFrame = 0;
+
+        this.init();
+        window.addEventListener("resize", () => this.resize());
+    }
+
+    init() {
+        this.resize();
+        this.startAnimation();
+    }
+
+    resize() {
+        this.w = window.innerWidth;
+        this.h = window.innerHeight;
+        this.canvas.width = this.w;
+        this.canvas.height = this.h;
+        this.x0 = this.w / 2;
+        this.y0 = this.h / 2;
+        this.dw = Math.round(Math.min(this.w, this.h) / 8);
+    }
+
+    startAnimation() {
+        const loop = (timestamp) => {
+            if (this.animate) {
+                this.draw(timestamp);
+            }
+            requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+    }
+
+    draw(timestamp) {
+        this.ctx.clearRect(0, 0, this.w, this.h);
+
+        // Calculate pulsing offset: 0 to dw
+        const cycleMs = 3000;
+        const phase = (timestamp % cycleMs) / cycleMs;
+        const pulseOffset = phase * this.dw;
+
+        const maxRadius = Math.max(this.w, this.h) * 0.7;
+
+        // Draw concentric circles from center
+        for (let r = pulseOffset; r < maxRadius; r += this.dw) {
+            if (r < 75) continue; // Don't draw over center host node
+
+            const distanceFactor = 1 - (r / maxRadius);
+            const opacity = Math.max(0, this.baseOpacity * distanceFactor);
+
+            this.ctx.beginPath();
+            this.ctx.arc(this.x0, this.y0, r, 0, Math.PI * 2);
+            this.ctx.strokeStyle = `rgba(${this.baseColor}, ${opacity})`;
+            this.ctx.lineWidth = 1.5;
+            this.ctx.stroke();
+        }
+
+        // Faint crosshair grid lines (radar styling)
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x0 - maxRadius, this.y0);
+        this.ctx.lineTo(this.x0 + maxRadius, this.y0);
+        this.ctx.moveTo(this.x0, this.y0 - maxRadius);
+        this.ctx.lineTo(this.x0, this.y0 + maxRadius);
+        this.ctx.strokeStyle = `rgba(${this.baseColor}, 0.04)`;
+        this.ctx.lineWidth = 1;
+        this.ctx.stroke();
+    }
+}
+
+window.RadarCanvas = RadarCanvas;
+
+    </script>
+    <script>
+/**
+ * BoostNet 64-Block Chunk Map Visualizer
+ * Lineage: BitTorrent piece maps & aria2 segment visualizer
+ * Renders 64 dynamic blocks showing real-time multi-phone range allocation.
+ */
+
+class ChunkVisualizer {
+    constructor(containerId = "chunk-grid") {
+        this.container = document.getElementById(containerId);
+        this.totalBlocks = 64;
+        this.blocks = [];
+        this.init();
+    }
+
+    init() {
+        if (!this.container) return;
+        this.container.innerHTML = "";
+        this.blocks = [];
+
+        for (let i = 0; i < this.totalBlocks; i++) {
+            const block = document.createElement("div");
+            block.className = "chunk-block";
+            block.dataset.index = i;
+            block.title = `Block #${i}: Idle`;
+            this.container.appendChild(block);
+            this.blocks.push(block);
+        }
+    }
+
+    updateBlocks(blockData) {
+        if (!blockData || !this.blocks.length) return;
+
+        blockData.forEach((item, idx) => {
+            if (idx >= this.blocks.length) return;
+            const el = this.blocks[idx];
+
+            const status = (item.status || "").toLowerCase();
+            if (status === "completed") {
+                el.style.backgroundColor = item.color || "#10b981";
+                el.style.color = item.color || "#10b981";
+                el.className = "chunk-block completed";
+                el.title = `Block #${idx}: Completed (${item.range || ''})`;
+            } else if (status === "downloading") {
+                el.style.backgroundColor = item.color || "#06b6d4";
+                el.style.color = item.color || "#06b6d4";
+                el.className = "chunk-block downloading";
+                el.title = `Block #${idx}: Downloading via Phone (${item.range || ''})`;
+            } else {
+                el.style.backgroundColor = "#1e293b";
+                el.className = "chunk-block";
+                el.title = `Block #${idx}: Queued`;
+            }
+        });
+    }
+
+    reset() {
+        this.blocks.forEach((el, idx) => {
+            el.style.backgroundColor = "#1e293b";
+            el.className = "chunk-block";
+            el.title = `Block #${idx}: Idle`;
+        });
+    }
+}
+
+window.ChunkVisualizer = ChunkVisualizer;
+
+    </script>
+    <script>
+/**
+ * BoostNet Frontend Orchestrator
+ * Lineage: PairDrop UI State Machine & Event Dispatcher
+ * Manages WebSocket telemetry, polar peer node layout, and telemetry drawers.
+ */
+
+class BoostNetApp {
+    constructor() {
+        this.ws = null;
+        this.nodes = [];
+        this.selectedNodeId = null;
+        this.chunkVisualizer = null;
+        this.radarCanvas = null;
+        this.isVirtualActive = false;
+
+        this.init();
+    }
+
+    init() {
+        this.radarCanvas = new RadarCanvas("radar-canvas");
+        this.chunkVisualizer = new ChunkVisualizer("chunk-grid");
+
+        this.bindEvents();
+        this.connectWebSocket();
+    }
+
+    bindEvents() {
+        // Drawer toggle
+        const drawer = document.getElementById("telemetry-drawer");
+        const drawerHeader = document.querySelector(".drawer-header");
+        if (drawerHeader) {
+            drawerHeader.addEventListener("click", (e) => {
+                // If clicked on tab button, don't toggle drawer
+                if (e.target.closest(".tab-btn")) return;
+                drawer.classList.toggle("expanded");
+            });
+        }
+
+        // Tab buttons
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const targetTab = btn.dataset.tab;
+                this.switchTab(targetTab);
+                drawer.classList.add("expanded");
+            });
+        });
+
+        // 1-Click Virtual Phone Cluster Toggle
+        const simBtn = document.getElementById("btn-toggle-sim");
+        if (simBtn) {
+            simBtn.addEventListener("click", () => this.toggleVirtualCluster());
+        }
+
+        // Mobile Guide Modal
+        const mobileGuideBtn = document.getElementById("btn-mobile-guide");
+        if (mobileGuideBtn) {
+            mobileGuideBtn.addEventListener("click", () => {
+                document.getElementById("mobile-guide-modal").classList.add("active");
+            });
+        }
+
+        // QR Pairing Modal
+        const qrBtn = document.getElementById("btn-pairing-qr");
+        if (qrBtn) {
+            qrBtn.addEventListener("click", () => this.openQrModal());
+        }
+
+        // Info / About Modal
+        const aboutBtn = document.getElementById("btn-about");
+        if (aboutBtn) {
+            aboutBtn.addEventListener("click", () => this.openAboutModal());
+        }
+
+        // Close modal buttons
+        document.querySelectorAll(".modal-close-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".modal-overlay").forEach((m) => m.classList.remove("active"));
+            });
+        });
+
+        // Start Download Form
+        const dlBtn = document.getElementById("btn-start-download");
+        const dlInput = document.getElementById("download-url-input");
+        if (dlBtn && dlInput) {
+            dlBtn.addEventListener("click", () => this.startDownload(dlInput.value));
+            dlInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") this.startDownload(dlInput.value);
+            });
+        }
+
+        // Demo Presets
+        document.querySelectorAll(".preset-chip").forEach((chip) => {
+            chip.addEventListener("click", () => {
+                const url = chip.dataset.url;
+                if (dlInput) dlInput.value = url;
+                this.startDownload(url);
+            });
+        });
+
+        // Stream Accelerator Button
+        const streamBtn = document.getElementById("btn-start-stream");
+        const streamInput = document.getElementById("stream-url-input");
+        if (streamBtn && streamInput) {
+            streamBtn.addEventListener("click", () => this.startStream(streamInput.value));
+        }
+
+        // Node Limits Update Save
+        const saveLimitsBtn = document.getElementById("btn-save-node-limits");
+        if (saveLimitsBtn) {
+            saveLimitsBtn.addEventListener("click", () => this.saveNodeLimits());
+        }
+
+        // Pause/Drain Button
+        const drainBtn = document.getElementById("btn-drain-node");
+        if (drainBtn) {
+            drainBtn.addEventListener("click", () => this.toggleNodeDrain());
+        }
+
+        // Evict Button
+        const evictBtn = document.getElementById("btn-evict-node");
+        if (evictBtn) {
+            evictBtn.addEventListener("click", () => this.evictNode());
+        }
+    }
+
+    switchTab(tabId) {
+        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".tab-pane").forEach((p) => p.classList.remove("active"));
+
+        const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+        const targetPane = document.getElementById(`tab-${tabId}`);
+
+        if (targetBtn) targetBtn.classList.add("active");
+        if (targetPane) targetPane.classList.add("active");
+    }
+
+    connectWebSocket() {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const wsUrl = `${protocol}//${window.location.host}/ws/telemetry`;
+
+        let isConnected = false;
+        try {
+            this.ws = new WebSocket(wsUrl);
+        } catch (e) {
+            console.warn("WebSocket initialization failed, activating Cloud Demo Mode:", e);
+            this.startDemoMode();
+            return;
+        }
+
+        // Instant cloud demo check: If deployed on Vercel or non-localhost, start demo immediately
+        if (!window.location.hostname.includes("127.0.0.1") && !window.location.hostname.includes("localhost")) {
+            this.startDemoMode();
+        }
+
+        // If local backend doesn't connect within 2.5s, fall back to Cloud Demo Mode
+        const fallbackTimer = setTimeout(() => {
+            if (!isConnected) {
+                console.info("BoostNet: Cloud showcase mode active (running autonomous demo simulation).");
+                this.startDemoMode();
+            }
+        }, 2500);
+
+        this.ws.onopen = () => {
+            isConnected = true;
+            clearTimeout(fallbackTimer);
+            this.stopDemoMode();
+            console.log("BoostNet Telemetry WebSocket connected to local backend.");
+        };
+
+        this.ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                this.handleTelemetryUpdate(data);
+            } catch (e) {
+                console.error("Telemetry parsing error:", e);
+            }
+        };
+
+        this.ws.onclose = () => {
+            if (!isConnected) {
+                this.startDemoMode();
+            }
+            setTimeout(() => this.connectWebSocket(), 5000);
+        };
+
+        this.ws.onerror = (err) => {
+            if (!isConnected) {
+                this.startDemoMode();
+            }
+        };
+    }
+
+    handleTelemetryUpdate(data) {
+        if (data.type === "telemetry") {
+            this.updateCenterHostNode(data);
+            this.updateOrbitingPeers(data.nodes || []);
+            this.updateVirtualClusterState(data.virtual_cluster_active);
+            this.updateSessionTable(data.sessions || []);
+            this.updateCongestionStatus(data.congestion || {});
+        } else if (data.type === "download_progress") {
+            this.updateDownloadProgress(data);
+        }
+    }
+
+    updateCenterHostNode(telemetry) {
+        const speedEl = document.getElementById("host-combined-speed");
+        const boostEl = document.getElementById("host-boost-multiplier");
+        const countEl = document.getElementById("host-active-count");
+
+        if (speedEl) speedEl.innerHTML = `${telemetry.combined_speed_mbps} <small>Mbps ▲</small>`;
+        if (boostEl) boostEl.innerText = `${telemetry.speed_multiplier}x Boost`;
+        if (countEl) countEl.innerText = `${telemetry.active_node_count} Active Nodes`;
+    }
+
+    updateOrbitingPeers(nodes) {
+        this.nodes = nodes;
+        const container = document.getElementById("orbiting-peers-container");
+        const emptyNotice = document.getElementById("empty-peers-notice");
+
+        if (!container) return;
+
+        if (nodes.length === 0) {
+            container.innerHTML = "";
+            if (emptyNotice) emptyNotice.style.display = "flex";
+            return;
+        }
+
+        if (emptyNotice) emptyNotice.style.display = "none";
+
+        // Polar layout geometry
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const isMobile = window.innerWidth <= 768;
+        const radiusFactor = isMobile ? 0.35 : 0.28;
+        const radius = Math.min(window.innerWidth, window.innerHeight) * radiusFactor;
+
+        // Sync peer DOM elements
+        const existingMap = new Map();
+        container.querySelectorAll(".peer-node").forEach((el) => {
+            existingMap.set(el.dataset.nodeId, el);
+        });
+
+        nodes.forEach((node, idx) => {
+            const angle = (2 * Math.PI * idx) / nodes.length - Math.PI / 2;
+            const x = cx + radius * Math.cos(angle);
+            const y = cy + radius * Math.sin(angle);
+
+            let peerEl = existingMap.get(node.node_id);
+            if (!peerEl) {
+                peerEl = this.createPeerElement(node);
+                container.appendChild(peerEl);
+            }
+
+            // Position with translate
+            peerEl.style.left = `${x}px`;
+            peerEl.style.top = `${y}px`;
+            peerEl.style.transform = "translate(-50%, -50%)";
+
+            this.updatePeerElement(peerEl, node);
+            existingMap.delete(node.node_id);
+        });
+
+        // Remove evicted peers
+        existingMap.forEach((el) => el.remove());
+    }
+
+    createPeerElement(node) {
+        const el = document.createElement("div");
+        el.className = "peer-node";
+        el.dataset.nodeId = node.node_id;
+
+        const isMobile = window.innerWidth <= 768;
+        const ringSize = isMobile ? 96 : 130;
+        const center = ringSize / 2;
+        const r = isMobile ? 41 : 58;
+        const circumference = (2 * Math.PI * r).toFixed(1);
+
+        el.innerHTML = `
+            <svg class="peer-svg-ring" viewBox="0 0 ${ringSize} ${ringSize}">
+                <circle class="bg" cx="${center}" cy="${center}" r="${r}"></circle>
+                <circle class="progress" cx="${center}" cy="${center}" r="${r}"
+                        stroke="${node.accent_color}"
+                        stroke-dasharray="${circumference}"
+                        stroke-dashoffset="${circumference}"></circle>
+            </svg>
+            <div class="peer-avatar" style="border: 2px solid ${node.accent_color};">
+                <svg viewBox="0 0 24 24" fill="${node.accent_color}">
+                    <path d="M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5-4H7V4h9v14z"></path>
+                </svg>
+            </div>
+            <div class="peer-name">${node.device_name}</div>
+            <div class="peer-carrier">${node.carrier}</div>
+            <div class="peer-speed-badge">
+                <span class="speed-val">${node.speed_mbps} Mbps</span>
+                <span style="color: var(--text-muted); font-size: 0.6rem;">•</span>
+                <span class="rtt-val">${node.rtt_ms}ms</span>
+            </div>
+        `;
+
+        el.addEventListener("click", () => this.openNodeDetailsModal(node.node_id));
+        return el;
+    }
+
+    updatePeerElement(el, node) {
+        const ring = el.querySelector("circle.progress");
+        if (ring) {
+            const isMobile = window.innerWidth <= 768;
+            const circumference = isMobile ? 257.6 : 364.4;
+            const pct = Math.min(100, Math.max(0, node.data_used_pct));
+            const offset = circumference - (circumference * pct) / 100;
+            ring.style.strokeDashoffset = offset;
+            ring.style.stroke = node.accent_color;
+        }
+
+        const speedVal = el.querySelector(".speed-val");
+        if (speedVal) speedVal.innerText = `${node.speed_mbps} Mbps`;
+
+        const rttVal = el.querySelector(".rtt-val");
+        if (rttVal) rttVal.innerText = `${node.rtt_ms}ms`;
+
+        if (node.status === "DRAINING") {
+            el.style.opacity = "0.7";
+            el.style.filter = "grayscale(0.5)";
+        } else if (node.status === "DEGRADED") {
+            el.style.borderColor = "var(--accent-amber)";
+        } else {
+            el.style.opacity = "1";
+            el.style.filter = "none";
+        }
+    }
+
+    updateVirtualClusterState(isActive) {
+        this.isVirtualActive = !!isActive;
+        const simBtn = document.getElementById("btn-toggle-sim");
+        if (simBtn) {
+            if (this.isVirtualActive) {
+                simBtn.classList.add("active");
+                simBtn.innerHTML = `<span class="status-dot"></span> Virtual Cluster (3 Nodes Active)`;
+            } else {
+                simBtn.classList.remove("active");
+                simBtn.innerHTML = `⚡ Simulate 3 Phones`;
+            }
+        }
+    }
+
+    async toggleVirtualCluster() {
+        try {
+            const res = await fetch("/api/v1/virtual-nodes/toggle", { method: "POST" });
+            const data = await res.json();
+            console.log("Virtual cluster toggled:", data);
+        } catch (e) {
+            console.warn("Toggling demo cluster locally on cloud showcase");
+            this.isVirtualActive = !this.isVirtualActive;
+            this.updateVirtualClusterState(this.isVirtualActive);
+            if (this.isVirtualActive) {
+                this.updateOrbitingPeers(this.demoNodes || []);
+                this.updateCenterHostNode({ combined_speed_mbps: 6.0, speed_multiplier: 3.0, active_node_count: 3 });
+            } else {
+                this.updateOrbitingPeers([]);
+                this.updateCenterHostNode({ combined_speed_mbps: 0.0, speed_multiplier: 1.0, active_node_count: 0 });
+            }
+        }
+    }
+
+    async openQrModal() {
+        try {
+            const res = await fetch("/api/v1/pairing-qr");
+            const data = await res.json();
+
+            const imgEl = document.getElementById("qr-modal-image");
+            const pinEl = document.getElementById("qr-modal-pin");
+            const ssidEl = document.getElementById("qr-modal-ssid");
+            const passEl = document.getElementById("qr-modal-pass");
+            const uriEl = document.getElementById("qr-modal-uri");
+
+            if (imgEl) imgEl.src = data.qr_image_data_url;
+            if (pinEl) pinEl.innerText = data.session_token;
+            if (ssidEl) ssidEl.innerText = data.ssid;
+            if (passEl) passEl.innerText = data.password;
+            if (uriEl) uriEl.innerText = data.pairing_uri;
+
+            document.getElementById("qr-pairing-modal").classList.add("active");
+        } catch (e) {
+            console.warn("Using demo QR pairing payload on cloud showcase");
+            const pinEl = document.getElementById("qr-modal-pin");
+            const ssidEl = document.getElementById("qr-modal-ssid");
+            const passEl = document.getElementById("qr-modal-pass");
+            const uriEl = document.getElementById("qr-modal-uri");
+
+            if (pinEl) pinEl.innerText = "bn_demo_84920481";
+            if (ssidEl) ssidEl.innerText = "BoostNet-College-Hotspot";
+            if (passEl) passEl.innerText = "boostnet2026";
+            if (uriEl) uriEl.innerText = "boostnet://pair?token=bn_demo_84920481&host=192.168.137.1&port=9050";
+            document.getElementById("qr-pairing-modal").classList.add("active");
+        }
+    }
+
+    openNodeDetailsModal(nodeId) {
+        this.selectedNodeId = nodeId;
+        const node = this.nodes.find((n) => n.node_id === nodeId);
+        if (!node) return;
+
+        document.getElementById("modal-node-title").innerText = `${node.device_name} (${node.carrier})`;
+        document.getElementById("modal-node-ip").innerText = node.node_id;
+        document.getElementById("modal-node-speed").innerText = `${node.speed_mbps} Mbps`;
+        document.getElementById("modal-node-rtt").innerText = `${node.rtt_ms} ms`;
+        document.getElementById("modal-node-used").innerText = `${node.data_used_mb} MB (${node.data_used_pct}%)`;
+
+        const capSlider = document.getElementById("slider-node-data-cap");
+        const capLabel = document.getElementById("label-node-data-cap");
+        if (capSlider && capLabel) {
+            capSlider.value = node.data_cap_mb;
+            capLabel.innerText = `${node.data_cap_mb} MB`;
+            capSlider.oninput = () => {
+                capLabel.innerText = `${capSlider.value} MB`;
+            };
+        }
+
+        const batterySlider = document.getElementById("slider-node-battery-cutoff");
+        const batteryLabel = document.getElementById("label-node-battery-cutoff");
+        if (batterySlider && batteryLabel) {
+            batterySlider.value = node.battery_cutoff_pct;
+            batteryLabel.innerText = `${node.battery_cutoff_pct}%`;
+            batterySlider.oninput = () => {
+                batteryLabel.innerText = `${batterySlider.value}%`;
+            };
+        }
+
+        const drainBtn = document.getElementById("btn-drain-node");
+        if (drainBtn) {
+            drainBtn.innerText = node.status === "DRAINING" ? "Resume Node" : "Drain & Pause Node";
+        }
+
+        document.getElementById("node-details-modal").classList.add("active");
+    }
+
+    async saveNodeLimits() {
+        if (!this.selectedNodeId) return;
+        const cap = parseFloat(document.getElementById("slider-node-data-cap").value);
+        const battery = parseInt(document.getElementById("slider-node-battery-cutoff").value);
+
+        try {
+            await fetch(`/api/v1/nodes/${encodeURIComponent(this.selectedNodeId)}/limits`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ data_cap_mb: cap, battery_cutoff_pct: battery }),
+            });
+            document.getElementById("node-details-modal").classList.remove("active");
+        } catch (e) {
+            console.error("Failed to update node limits:", e);
+        }
+    }
+
+    async toggleNodeDrain() {
+        if (!this.selectedNodeId) return;
+        const node = this.nodes.find((n) => n.node_id === this.selectedNodeId);
+        if (!node) return;
+
+        const newStatus = node.status === "DRAINING" ? "ACTIVE" : "DRAINING";
+        try {
+            await fetch(`/api/v1/nodes/${encodeURIComponent(this.selectedNodeId)}/status`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: newStatus }),
+            });
+            document.getElementById("node-details-modal").classList.remove("active");
+        } catch (e) {
+            console.error("Failed to toggle node drain:", e);
+        }
+    }
+
+    async evictNode() {
+        if (!this.selectedNodeId) return;
+        try {
+            await fetch(`/api/v1/nodes/${encodeURIComponent(this.selectedNodeId)}`, {
+                method: "DELETE",
+            });
+            document.getElementById("node-details-modal").classList.remove("active");
+        } catch (e) {
+            console.error("Failed to evict node:", e);
+        }
+    }
+
+    openAboutModal() {
+        document.getElementById("about-modal").classList.add("active");
+    }
+
+    async startDownload(url) {
+        if (!url) return;
+        const statusEl = document.getElementById("download-status-banner");
+        if (statusEl) {
+            statusEl.style.display = "block";
+            statusEl.innerHTML = `⚡ Preflight Multi-IP Probe in progress across phone nodes...`;
+        }
+
+        // Expand drawer to show chunk map
+        document.getElementById("telemetry-drawer").classList.add("expanded");
+        this.switchTab("downloader");
+
+        try {
+            const res = await fetch("/api/v1/downloads", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: url }),
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            console.log("Download started:", data);
+        } catch (e) {
+            console.warn("Running simulated interactive download on cloud showcase:", e);
+            this.runDemoDownload(url);
+        }
+    }
+
+    updateDownloadProgress(data) {
+        const fileEl = document.getElementById("dl-current-filename");
+        const speedEl = document.getElementById("dl-current-speed");
+        const progressEl = document.getElementById("dl-progress-bar");
+        const statsEl = document.getElementById("dl-stats-text");
+        const shaEl = document.getElementById("dl-sha256-text");
+
+        if (fileEl) fileEl.innerText = data.filename;
+        if (speedEl) speedEl.innerText = `${data.speed_mbps} Mbps (ETA: ${data.eta_sec || 0}s)`;
+
+        if (progressEl) progressEl.style.width = `${data.progress_pct}%`;
+
+        if (statsEl) {
+            const downMb = (data.downloaded_bytes / (1024 * 1024)).toFixed(1);
+            const totalMb = (data.total_bytes / (1024 * 1024)).toFixed(1);
+            statsEl.innerText = `${downMb} / ${totalMb} MB (${data.progress_pct}%) • Status: ${data.status}`;
+        }
+
+        if (shaEl && data.sha256) {
+            shaEl.innerHTML = `SHA-256: <code>${data.sha256.substring(0, 16)}...</code> ${data.hash_verified ? '<span style="color:var(--accent-emerald);">[Verified ✓]</span>' : ''}`;
+        }
+
+        // Update 64-block aria2 chunk visualizer
+        if (this.chunkVisualizer && data.blocks) {
+            this.chunkVisualizer.updateBlocks(data.blocks);
+        }
+    }
+
+    startStream(url) {
+        if (!url) return;
+        const video = document.getElementById("stream-video-player");
+        if (video) {
+            const streamProxyUrl = `/api/v1/stream-proxy?url=${encodeURIComponent(url)}`;
+            video.src = streamProxyUrl;
+            video.play().catch((e) => console.log("Autoplay waiting for user:", e));
+        }
+
+        // Expand drawer to stream tab
+        document.getElementById("telemetry-drawer").classList.add("expanded");
+        this.switchTab("stream");
+    }
+
+    updateSessionTable(sessions) {
+        const tbody = document.getElementById("session-table-body");
+        if (!tbody) return;
+
+        if (sessions.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No active proxy sessions (:9050). Open Chrome or run pip install to see traffic.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = sessions.map((s) => `
+            <tr>
+                <td style="font-family: var(--font-mono);">${s.host}</td>
+                <td><span style="color: ${s.accent_color}; font-weight:600;">${s.carrier}</span></td>
+                <td>
+                    <span class="${s.routing_type.includes('Striped') ? 'badge-striped' : 'badge-sticky'}">
+                        ${s.routing_type}
+                    </span>
+                </td>
+                <td style="font-family: var(--font-mono);">${(s.bytes / 1024).toFixed(1)} KB</td>
+                <td>${s.duration_sec}s</td>
+                <td><span style="color: ${s.status === 'ACTIVE' ? 'var(--accent-emerald)' : 'var(--text-muted)'};">${s.status}</span></td>
+            </tr>
+        `).join("");
+    }
+
+    updateCongestionStatus(congestion) {
+        const banner = document.getElementById("congestion-banner");
+        if (!banner) return;
+
+        if (congestion.has_shared_bottleneck) {
+            banner.style.display = "flex";
+            banner.innerText = `⚠️ Shared Tower Bottleneck Detected (Jio SIMs) — Airtime Contention Mitigation Active`;
+        } else {
+            banner.style.display = "none";
+        }
+    }
+
+    startDemoMode() {
+        if (this.demoInterval) return;
+        console.log("BoostNet: Running in Autonomous Demo/Simulation Mode (for Vercel/Cloud Showcase)");
+
+        const proxyPill = document.querySelector(".header-actions .action-pill.active span:last-child");
+        if (proxyPill) proxyPill.innerText = "Cloud Demo Mode";
+
+        this.demoNodes = [
+            {
+                node_id: "127.0.0.1:10801",
+                device_name: "Rahul's Moto G45",
+                carrier: "Airtel 5G",
+                host: "127.0.0.1",
+                port: 10801,
+                status: "ACTIVE",
+                battery_level: 88,
+                battery_cutoff_pct: 25,
+                data_cap_mb: 250.0,
+                bytes_transferred: 14 * 1024 * 1024,
+                speed_mbps: 3.2,
+                rtt_ms: 25,
+                data_used_mb: 14.0,
+                data_used_pct: 5.6,
+                accent_color: "#06b6d4"
+            },
+            {
+                node_id: "127.0.0.1:10802",
+                device_name: "Priya's Samsung Galaxy",
+                carrier: "Jio 4G",
+                host: "127.0.0.1",
+                port: 10802,
+                status: "ACTIVE",
+                battery_level: 74,
+                battery_cutoff_pct: 25,
+                data_cap_mb: 200.0,
+                bytes_transferred: 9 * 1024 * 1024,
+                speed_mbps: 1.6,
+                rtt_ms: 45,
+                data_used_mb: 9.0,
+                data_used_pct: 4.5,
+                accent_color: "#10b981"
+            },
+            {
+                node_id: "127.0.0.1:10803",
+                device_name: "Aman's Vivo V29",
+                carrier: "Vi 4G",
+                host: "127.0.0.1",
+                port: 10803,
+                status: "ACTIVE",
+                battery_level: 42,
+                battery_cutoff_pct: 25,
+                data_cap_mb: 150.0,
+                bytes_transferred: 6 * 1024 * 1024,
+                speed_mbps: 1.2,
+                rtt_ms: 60,
+                data_used_mb: 6.0,
+                data_used_pct: 4.0,
+                accent_color: "#8b5cf6"
+            }
+        ];
+
+        this.demoTelemetry = {
+            type: "telemetry",
+            active_node_count: 3,
+            combined_speed_mbps: 6.0,
+            speed_multiplier: 3.0,
+            virtual_cluster_active: true,
+            nodes: this.demoNodes,
+            sessions: [
+                { session_id: "ses_1", host: "r1---sn-googlevideo.com:443", carrier: "Airtel 5G", accent_color: "#06b6d4", routing_type: "Striped (Stateless CDN)", bytes: 1048576, status: "ACTIVE", duration_sec: 14.2 },
+                { session_id: "ses_2", host: "r2---sn-googlevideo.com:443", carrier: "Jio 4G", accent_color: "#10b981", routing_type: "Striped (Stateless CDN)", bytes: 819200, status: "ACTIVE", duration_sec: 12.0 },
+                { session_id: "ses_3", host: "github.com:443", carrier: "Vi 4G", accent_color: "#8b5cf6", routing_type: "Sticky (Host Affinity)", bytes: 32768, status: "ACTIVE", duration_sec: 8.5 }
+            ],
+            congestion: {
+                has_shared_bottleneck: false,
+                status: "OPTIMAL"
+            }
+        };
+
+        this.handleTelemetryUpdate(this.demoTelemetry);
+
+        // Fluctuate speeds subtly for realistic feel
+        this.demoInterval = setInterval(() => {
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.stopDemoMode();
+                return;
+            }
+            if (!this.demoNodes || this.demoNodes.length === 0) return;
+            const j1 = (Math.random() * 0.4 - 0.2);
+            const j2 = (Math.random() * 0.3 - 0.15);
+            const j3 = (Math.random() * 0.2 - 0.1);
+            this.demoNodes[0].speed_mbps = parseFloat(Math.max(1.8, 3.2 + j1).toFixed(2));
+            this.demoNodes[1].speed_mbps = parseFloat(Math.max(0.9, 1.6 + j2).toFixed(2));
+            this.demoNodes[2].speed_mbps = parseFloat(Math.max(0.6, 1.2 + j3).toFixed(2));
+            this.demoTelemetry.combined_speed_mbps = parseFloat(
+                (this.demoNodes[0].speed_mbps + this.demoNodes[1].speed_mbps + this.demoNodes[2].speed_mbps).toFixed(1)
+            );
+            this.handleTelemetryUpdate(this.demoTelemetry);
+        }, 1800);
+    }
+
+    stopDemoMode() {
+        if (this.demoInterval) {
+            clearInterval(this.demoInterval);
+            this.demoInterval = null;
+        }
+        const proxyPill = document.querySelector(".header-actions .action-pill.active span:last-child");
+        if (proxyPill) proxyPill.innerText = "Proxy :9050 ON";
+    }
+
+    runDemoDownload(url) {
+        const filename = (url && url.split("/").pop()) || "test-16mb.bin";
+        const statusEl = document.getElementById("download-status-banner");
+        if (statusEl) {
+            statusEl.style.display = "block";
+            statusEl.innerHTML = `⚡ [Demo Mode] Preflight Multi-IP Probe verified across Airtel 5G, Jio 4G, Vi 4G (HTTP 206 Accept-Ranges OK)`;
+        }
+
+        const totalBytes = 16 * 1024 * 1024;
+        let downloadedBytes = 0;
+        const totalBlocks = 64;
+        const blocks = Array.from({ length: totalBlocks }, (_, i) => ({
+            index: i,
+            progress_pct: 0,
+            status: "PENDING",
+            color: null
+        }));
+
+        const nodeColors = ["#06b6d4", "#10b981", "#8b5cf6"];
+        let blockCursor = 0;
+
+        if (this.demoDownloadInterval) clearInterval(this.demoDownloadInterval);
+
+        this.demoDownloadInterval = setInterval(() => {
+            const step = Math.min(3, totalBlocks - blockCursor);
+            for (let s = 0; s < step; s++) {
+                const bIdx = blockCursor + s;
+                if (bIdx < totalBlocks) {
+                    blocks[bIdx].status = "COMPLETED";
+                    blocks[bIdx].progress_pct = 100;
+                    blocks[bIdx].color = nodeColors[bIdx % 3];
+                }
+            }
+            blockCursor += step;
+            downloadedBytes = Math.min(totalBytes, Math.floor((blockCursor / totalBlocks) * totalBytes));
+
+            const pct = Math.floor((downloadedBytes / totalBytes) * 100);
+            const isDone = blockCursor >= totalBlocks;
+
+            this.updateDownloadProgress({
+                filename: filename,
+                downloaded_bytes: downloadedBytes,
+                total_bytes: totalBytes,
+                progress_pct: pct,
+                speed_mbps: (4.4 + (Math.random() * 0.4 - 0.2)).toFixed(2),
+                eta_sec: isDone ? 0 : Math.max(1, Math.round((totalBlocks - blockCursor) * 0.4)),
+                status: isDone ? "COMPLETED" : "DOWNLOADING",
+                sha256: "62f9b00b08ccfa3fd38bd262ab13302dd85b95694393e22a6ff2e37a69d57b6c",
+                hash_verified: isDone,
+                blocks: blocks
+            });
+
+            if (isDone) {
+                clearInterval(this.demoDownloadInterval);
+                this.demoDownloadInterval = null;
+                if (statusEl) {
+                    statusEl.innerHTML = `🎉 [Demo Mode] Download Complete! SHA-256 byte-exact match verified across all phone chunks.`;
+                }
+            }
+        }, 300);
+    }
+}
+
+// Instantiate on DOM load
+window.addEventListener("DOMContentLoaded", () => {
+    window.app = new BoostNetApp();
+});
+
+    </script>
 </body>
 </html>

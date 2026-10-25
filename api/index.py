@@ -77,6 +77,21 @@ async def start_download():
     return {"status": "ok", "message": "Cloud showcase simulation active"}
 
 
+@app.post("/api/v1/nodes/{node_id}/limits")
+async def update_node_limits(node_id: str):
+    return {"status": "ok", "node_id": node_id}
+
+
+@app.post("/api/v1/nodes/{node_id}/status")
+async def update_node_status(node_id: str):
+    return {"status": "ok", "node_id": node_id}
+
+
+@app.delete("/api/v1/nodes/{node_id}")
+async def evict_node(node_id: str):
+    return {"status": "ok", "node_id": node_id}
+
+
 # 3. Static Assets & Catch-all route
 @app.get("/{full_path:path}")
 async def serve_static_or_fallback(full_path: str):
