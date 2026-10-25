@@ -5,6 +5,7 @@ and app.js with instant Cloud Demo mode and mobile setup guide.
 """
 
 from pathlib import Path
+from api.index import DEMO_QR_DATA_URL
 
 ROOT = Path(r"c:\SAMYAKFILES\Users\AppData\Local\Programs\DATA SCIENCE COURSE\BoostNet")
 FRONTEND_DIR = ROOT / "frontend"
@@ -261,6 +262,9 @@ app_content_fixed = app_content_fixed.replace(
         }
 
         // QR Pairing Modal'''
+).replace(
+    '            if (imgEl) imgEl.src = data.qr_image_data_url;',
+    '            if (imgEl && data.qr_image_data_url) imgEl.src = data.qr_image_data_url;'
 )
 
 html_markup = f"""<!DOCTYPE html>
@@ -550,7 +554,7 @@ html_markup = f"""<!DOCTYPE html>
             <div class="modal-body">
                 <div class="modal-qr-container">
                     <div class="qr-image-wrapper">
-                        <img id="qr-modal-image" alt="Pairing QR Code"/>
+                        <img id="qr-modal-image" src="{DEMO_QR_DATA_URL}" alt="Pairing QR Code"/>
                     </div>
                     <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-emerald);">
                         Session PIN: <span id="qr-modal-pin">8f4a2e</span>
