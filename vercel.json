@@ -1,9 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "frontend",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/static/(.*)", "destination": "/frontend/$1" },
-    { "source": "/", "destination": "/frontend/index.html" },
-    { "source": "/(.*)", "destination": "/frontend/$1" }
+    { "source": "/static/(.*)", "destination": "/$1" }
   ]
 }
