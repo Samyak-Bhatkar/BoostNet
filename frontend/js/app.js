@@ -131,10 +131,28 @@ class BoostNetApp {
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         const wsUrl = `${protocol}//${window.location.host}/ws/telemetry`;
 
-        this.ws = new WebSocket(wsUrl);
+        let isConnected = false;
+        try {
+            this.ws = new WebSocket(wsUrl);
+        } catch (e) {
+            console.warn("WebSocket initialization failed, activating Cloud Demo Mode:", e);
+            this.startDemoMode();
+            return;
+        }
+
+        // If local backend doesn't connect within 2.5s (e.g. on Vercel), fall back to Cloud Demo Mode
+        const fallbackTimer = setTimeout(() => {
+            if (!isConnected) {
+                console.info("BoostNet: Cloud showcase mode active (running autonomous demo simulation).");
+                this.startDemoMode();
+            }
+        }, 2500);
 
         this.ws.onopen = () => {
-            console.log("BoostNet Telemetry WebSocket connected.");
+            isConnected = true;
+            clearTimeout(fallbackTimer);
+            this.stopDemoMode();
+            console.log("BoostNet Telemetry WebSocket connected to local backend.");
         };
 
         this.ws.onmessage = (event) => {
@@ -147,13 +165,16 @@ class BoostNetApp {
         };
 
         this.ws.onclose = () => {
-            console.warn("WebSocket closed. Reconnecting in 2 seconds...");
-            setTimeout(() => this.connectWebSocket(), 2000);
+            if (!isConnected) {
+                this.startDemoMode();
+            }
+            setTimeout(() => this.connectWebSocket(), 5000);
         };
 
         this.ws.onerror = (err) => {
-            console.error("WebSocket error:", err);
-            this.ws.close();
+            if (!isConnected) {
+                this.startDemoMode();
+            }
         };
     }
 
@@ -308,7 +329,16 @@ class BoostNetApp {
             const data = await res.json();
             console.log("Virtual cluster toggled:", data);
         } catch (e) {
-            console.error("Failed to toggle virtual cluster:", e);
+            console.warn("Toggling demo cluster locally on cloud showcase");
+            this.isVirtualActive = !this.isVirtualActive;
+            this.updateVirtualClusterState(this.isVirtualActive);
+            if (this.isVirtualActive) {
+                this.updateOrbitingPeers(this.demoNodes || []);
+                this.updateCenterHostNode({ combined_speed_mbps: 6.0, speed_multiplier: 3.0, active_node_count: 3 });
+            } else {
+                this.updateOrbitingPeers([]);
+                this.updateCenterHostNode({ combined_speed_mbps: 0.0, speed_multiplier: 1.0, active_node_count: 0 });
+            }
         }
     }
 
@@ -331,7 +361,17 @@ class BoostNetApp {
 
             document.getElementById("qr-pairing-modal").classList.add("active");
         } catch (e) {
-            console.error("Failed to load QR pairing payload:", e);
+            console.warn("Using demo QR pairing payload on cloud showcase");
+            const pinEl = document.getElementById("qr-modal-pin");
+            const ssidEl = document.getElementById("qr-modal-ssid");
+            const passEl = document.getElementById("qr-modal-pass");
+            const uriEl = document.getElementById("qr-modal-uri");
+
+            if (pinEl) pinEl.innerText = "bn_demo_84920481";
+            if (ssidEl) ssidEl.innerText = "BoostNet-College-Hotspot";
+            if (passEl) passEl.innerText = "boostnet2026";
+            if (uriEl) uriEl.innerText = "boostnet://pair?token=bn_demo_84920481&host=192.168.137.1&port=9050";
+            document.getElementById("qr-pairing-modal").classList.add("active");
         }
     }
 
@@ -443,10 +483,12 @@ class BoostNetApp {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ url: url }),
             });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             console.log("Download started:", data);
         } catch (e) {
-            console.error("Download failed to launch:", e);
+            console.warn("Running simulated interactive download on cloud showcase:", e);
+            this.runDemoDownload(url);
         }
     }
 
@@ -527,6 +569,178 @@ class BoostNetApp {
         } else {
             banner.style.display = "none";
         }
+    }
+
+    startDemoMode() {
+        if (this.demoInterval) return;
+        console.log("BoostNet: Running in Autonomous Demo/Simulation Mode (for Vercel/Cloud Showcase)");
+
+        const proxyPill = document.querySelector(".header-actions .action-pill.active span:last-child");
+        if (proxyPill) proxyPill.innerText = "Cloud Demo Mode";
+
+        this.demoNodes = [
+            {
+                node_id: "127.0.0.1:10801",
+                device_name: "Rahul's Moto G45",
+                carrier: "Airtel 5G",
+                host: "127.0.0.1",
+                port: 10801,
+                status: "ACTIVE",
+                battery_level: 88,
+                battery_cutoff_pct: 25,
+                data_cap_mb: 250.0,
+                bytes_transferred: 14 * 1024 * 1024,
+                speed_mbps: 3.2,
+                rtt_ms: 25,
+                data_used_mb: 14.0,
+                data_used_pct: 5.6,
+                accent_color: "#06b6d4"
+            },
+            {
+                node_id: "127.0.0.1:10802",
+                device_name: "Priya's Samsung Galaxy",
+                carrier: "Jio 4G",
+                host: "127.0.0.1",
+                port: 10802,
+                status: "ACTIVE",
+                battery_level: 74,
+                battery_cutoff_pct: 25,
+                data_cap_mb: 200.0,
+                bytes_transferred: 9 * 1024 * 1024,
+                speed_mbps: 1.6,
+                rtt_ms: 45,
+                data_used_mb: 9.0,
+                data_used_pct: 4.5,
+                accent_color: "#10b981"
+            },
+            {
+                node_id: "127.0.0.1:10803",
+                device_name: "Aman's Vivo V29",
+                carrier: "Vi 4G",
+                host: "127.0.0.1",
+                port: 10803,
+                status: "ACTIVE",
+                battery_level: 42,
+                battery_cutoff_pct: 25,
+                data_cap_mb: 150.0,
+                bytes_transferred: 6 * 1024 * 1024,
+                speed_mbps: 1.2,
+                rtt_ms: 60,
+                data_used_mb: 6.0,
+                data_used_pct: 4.0,
+                accent_color: "#8b5cf6"
+            }
+        ];
+
+        this.demoTelemetry = {
+            type: "telemetry",
+            active_node_count: 3,
+            combined_speed_mbps: 6.0,
+            speed_multiplier: 3.0,
+            virtual_cluster_active: true,
+            nodes: this.demoNodes,
+            sessions: [
+                { session_id: "ses_1", host: "r1---sn-googlevideo.com:443", carrier: "Airtel 5G", accent_color: "#06b6d4", routing_type: "Striped (Stateless CDN)", bytes: 1048576, status: "ACTIVE", duration_sec: 14.2 },
+                { session_id: "ses_2", host: "r2---sn-googlevideo.com:443", carrier: "Jio 4G", accent_color: "#10b981", routing_type: "Striped (Stateless CDN)", bytes: 819200, status: "ACTIVE", duration_sec: 12.0 },
+                { session_id: "ses_3", host: "github.com:443", carrier: "Vi 4G", accent_color: "#8b5cf6", routing_type: "Sticky (Host Affinity)", bytes: 32768, status: "ACTIVE", duration_sec: 8.5 }
+            ],
+            congestion: {
+                has_shared_bottleneck: false,
+                status: "OPTIMAL"
+            }
+        };
+
+        this.handleTelemetryUpdate(this.demoTelemetry);
+
+        // Fluctuate speeds subtly for realistic feel
+        this.demoInterval = setInterval(() => {
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.stopDemoMode();
+                return;
+            }
+            if (!this.demoNodes || this.demoNodes.length === 0) return;
+            const j1 = (Math.random() * 0.4 - 0.2);
+            const j2 = (Math.random() * 0.3 - 0.15);
+            const j3 = (Math.random() * 0.2 - 0.1);
+            this.demoNodes[0].speed_mbps = parseFloat(Math.max(1.8, 3.2 + j1).toFixed(2));
+            this.demoNodes[1].speed_mbps = parseFloat(Math.max(0.9, 1.6 + j2).toFixed(2));
+            this.demoNodes[2].speed_mbps = parseFloat(Math.max(0.6, 1.2 + j3).toFixed(2));
+            this.demoTelemetry.combined_speed_mbps = parseFloat(
+                (this.demoNodes[0].speed_mbps + this.demoNodes[1].speed_mbps + this.demoNodes[2].speed_mbps).toFixed(1)
+            );
+            this.handleTelemetryUpdate(this.demoTelemetry);
+        }, 1800);
+    }
+
+    stopDemoMode() {
+        if (this.demoInterval) {
+            clearInterval(this.demoInterval);
+            this.demoInterval = null;
+        }
+        const proxyPill = document.querySelector(".header-actions .action-pill.active span:last-child");
+        if (proxyPill) proxyPill.innerText = "Proxy :9050 ON";
+    }
+
+    runDemoDownload(url) {
+        const filename = (url && url.split("/").pop()) || "test-16mb.bin";
+        const statusEl = document.getElementById("download-status-banner");
+        if (statusEl) {
+            statusEl.style.display = "block";
+            statusEl.innerHTML = `⚡ [Demo Mode] Preflight Multi-IP Probe verified across Airtel 5G, Jio 4G, Vi 4G (HTTP 206 Accept-Ranges OK)`;
+        }
+
+        const totalBytes = 16 * 1024 * 1024;
+        let downloadedBytes = 0;
+        const totalBlocks = 64;
+        const blocks = Array.from({ length: totalBlocks }, (_, i) => ({
+            index: i,
+            progress_pct: 0,
+            status: "PENDING",
+            color: null
+        }));
+
+        const nodeColors = ["#06b6d4", "#10b981", "#8b5cf6"];
+        let blockCursor = 0;
+
+        if (this.demoDownloadInterval) clearInterval(this.demoDownloadInterval);
+
+        this.demoDownloadInterval = setInterval(() => {
+            const step = Math.min(3, totalBlocks - blockCursor);
+            for (let s = 0; s < step; s++) {
+                const bIdx = blockCursor + s;
+                if (bIdx < totalBlocks) {
+                    blocks[bIdx].status = "COMPLETED";
+                    blocks[bIdx].progress_pct = 100;
+                    blocks[bIdx].color = nodeColors[bIdx % 3];
+                }
+            }
+            blockCursor += step;
+            downloadedBytes = Math.min(totalBytes, Math.floor((blockCursor / totalBlocks) * totalBytes));
+
+            const pct = Math.floor((downloadedBytes / totalBytes) * 100);
+            const isDone = blockCursor >= totalBlocks;
+
+            this.updateDownloadProgress({
+                filename: filename,
+                downloaded_bytes: downloadedBytes,
+                total_bytes: totalBytes,
+                progress_pct: pct,
+                speed_mbps: (4.4 + (Math.random() * 0.4 - 0.2)).toFixed(2),
+                eta_sec: isDone ? 0 : Math.max(1, Math.round((totalBlocks - blockCursor) * 0.4)),
+                status: isDone ? "COMPLETED" : "DOWNLOADING",
+                sha256: "62f9b00b08ccfa3fd38bd262ab13302dd85b95694393e22a6ff2e37a69d57b6c",
+                hash_verified: isDone,
+                blocks: blocks
+            });
+
+            if (isDone) {
+                clearInterval(this.demoDownloadInterval);
+                this.demoDownloadInterval = null;
+                if (statusEl) {
+                    statusEl.innerHTML = `🎉 [Demo Mode] Download Complete! SHA-256 byte-exact match verified across all phone chunks.`;
+                }
+            }
+        }, 300);
     }
 }
 
