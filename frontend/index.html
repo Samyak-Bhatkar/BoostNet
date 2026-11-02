@@ -803,6 +803,52 @@ table.session-table td {
     padding: 20px;
 }
 
+/* Modern Segmented Control / Tab Switcher */
+.qr-tab-nav {
+    display: flex;
+    background: var(--surface-2);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    gap: 4px;
+    border: 1px solid var(--border-subtle);
+}
+
+.qr-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.qr-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.qr-tab-btn.active {
+    background: var(--accent-emerald);
+    color: #050b14;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+}
+
+.qr-tab-btn svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+}
+
 .modal-qr-container {
     display: flex;
     flex-direction: column;
@@ -810,18 +856,133 @@ table.session-table td {
     margin-bottom: 16px;
 }
 
+/* High-Contrast White Card for ISO/IEC 18004 Standard QR Camera Detection */
 .qr-image-wrapper {
-    padding: 12px;
-    background: #000;
-    border: 2px solid var(--accent-emerald);
-    border-radius: 12px;
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.25);
+    border: 2px solid rgba(16, 185, 129, 0.4);
     margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.qr-image-wrapper:hover {
+    transform: scale(1.02);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(16, 185, 129, 0.45);
 }
 
 .qr-image-wrapper img {
-    width: 190px;
-    height: 190px;
+    width: 200px;
+    height: 200px;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Status Pill with Pulsing Dot */
+.qr-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: var(--accent-emerald);
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+}
+
+.qr-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 8px var(--accent-emerald);
+    animation: pulse-dot 1.5s infinite;
+}
+
+/* Sleek Credential Card */
+.qr-credential-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.qr-credential-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.qr-credential-label {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.qr-credential-val-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qr-credential-value {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.qr-copy-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent-cyan);
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qr-copy-btn:hover {
+    background: rgba(6, 182, 212, 0.25);
+    color: #fff;
+}
+
+.qr-copy-btn.copied {
+    color: var(--accent-emerald);
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Step-by-Step Instructions */
+.qr-instruction-banner {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(6, 182, 212, 0.06);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
 }
 
 .modal-footer {
@@ -1303,32 +1464,80 @@ svg {
         </div>
     </div>
 
-    <!-- QR Code Pairing Modal (PairDrop Style) -->
+    <!-- QR Code Pairing Modal (World-Class PairDrop Experience) -->
     <div class="modal-overlay" id="qr-pairing-modal">
-        <div class="modal-card">
+        <div class="modal-card" style="max-width: 460px;">
             <div class="modal-header">
-                <h3>Pair Android Phone</h3>
+                <div>
+                    <h3 style="margin-bottom: 2px;">Pair Android Phone</h3>
+                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0;">Zero-Config 4G/5G Bandwidth Bonding</p>
+                </div>
                 <button class="icon-btn modal-close-btn" style="width: 32px; height: 32px;">✕</button>
             </div>
             <div class="modal-body">
+                <!-- Segmented Control Tabs -->
+                <div class="qr-tab-nav">
+                    <button class="qr-tab-btn active" id="tab-btn-wifi">
+                        <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.81 0 7.27 1.49 9.87 3.91L12 19.33 2.13 11.41C4.73 8.99 8.19 7.5 12 7.5z"/></svg>
+                        1-Tap Wi-Fi Join
+                    </button>
+                    <button class="qr-tab-btn" id="tab-btn-app">
+                        <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                        BoostNet App
+                    </button>
+                </div>
+
+                <!-- High-Contrast Decodable QR Display Container -->
                 <div class="modal-qr-container">
                     <div class="qr-image-wrapper">
-                        <img id="qr-modal-image" src="data:image/png;base64,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" alt="Pairing QR Code"/>
+                        <img id="qr-modal-image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADI0lEQVR4nO1cS46jQAy1Q6QsQZoD5ChwgzlSq4/UNwhH6RvAMhKRR/4UkJlFdylMo6TeW6CCYHXFZdnPnzQLZaM/5MsQQSgARQSgiAAUEYAiAlBEAIp4JkVw4EhEY1y404uCaEwvdLtsLxMQ2kARrSgGIu7qKzM3SiAbIpGhEu6oss8TC4XKC1DEmByA2cGlvjK1MhHz+cr2QniQnbaXBQg9oojjP0/Gk1A7kFDP1ST9byKh8f4VqLwgRYi5h765MZGu/t9f+hYgtJuPqJUjqCtoP4/E7edJ2BwFUeXsYV3Jwjm9viJ6yyQaZZbJBDzheFMD6ejmqcZe28sDhB73EbI86JvKiYMQXVPoMA+yACp/eUWw1xm0FNEOSiHILuotxpPIu6YZ6kZ22l4mIPSIIsgLDTIYqZy0AKFkwm6NaM4vajLq716g8sCrW4QMRiEqsdOP1WDFqWn9MiyihCr2OVWj3BgsfthKS5jBNmfK+RTfKRMQSvDqdOuOQv2BO4rl00lDx+I84CMKMaPxuG5pRMCIorYRzaAaO20vCxDagkcY1D04gVRvoZ4hVrU2uYx3KsAjiogakxUuPTh4mmF80gxELSI9g0WUEzXk4vWIaI5rrUr8mYK7enqy75QFCN37CIPZgWM+faeSyUeAWZZjRrUaw8iJQKrLsKjhXVDta3QeU/bZXhYgtAGPoJk7mj9YUlAPInOagezz5W2PgizS3enPpNKfmb3MBAO5RhG5xnDHKCLrsFXknLCI8iZmOFYDcfuhN/UQQ3ZEt2PqkP/s9g4Q2jX7rKP3Ke9nIxP2iTFLH5zQqex9tpcFCG3FLNvU11jziPtIAh5RiO3JPB/BrOlm77/l0YAxsvZDE4/YZ3uZgNDjPILjrpqExoa4HZoYrfNO1/hrop7BI4rshl98RP+v7lfEFESNorJPmuelVpMS4BFPfLiH7YT6NFIlF+URXsycs47dt/cFILSpIvrl552rIe2T8BuYZalTdZSq2GkaNxUzY4UqdhH1CMcyYpkmp+ZeB2aoChFi/GeypzinA4QcUEQAighAEQEoIgBFBH5OEX8A1bBlBXeX1ToAAAAASUVORK5CYII=" alt="Pairing QR Code"/>
                     </div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-emerald);">
-                        Session PIN: <span id="qr-modal-pin">8f4a2e</span>
+                    <div class="qr-status-pill">
+                        <span class="qr-pulse-dot"></span>
+                        <span id="qr-status-text">Camera Scan: Auto-Connect Wi-Fi</span>
                     </div>
                 </div>
-                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; background: var(--surface-2); padding: 12px; border-radius: 8px;">
-                    <div><strong>Wi-Fi SSID:</strong> <span id="qr-modal-ssid">BoostNet_Hotspot</span></div>
-                    <div><strong>Password:</strong> <span id="qr-modal-pass">boostnet2026</span></div>
-                    <div style="margin-top: 6px; font-size: 0.72rem; color: var(--text-muted); word-break: break-all;">
-                        URI: <code id="qr-modal-uri">boostnet://pair?...</code>
+
+                <!-- Hotspot & Pairing Credentials Card with 1-Click Copy -->
+                <div class="qr-credential-card">
+                    <div class="qr-credential-row">
+                        <span class="qr-credential-label">Wi-Fi SSID</span>
+                        <div class="qr-credential-val-group">
+                            <span class="qr-credential-value" id="qr-modal-ssid">BoostNet-College-Hotspot</span>
+                            <button class="qr-copy-btn" id="btn-copy-ssid">Copy</button>
+                        </div>
                     </div>
+                    <div class="qr-credential-row">
+                        <span class="qr-credential-label">Hotspot Password</span>
+                        <div class="qr-credential-val-group">
+                            <span class="qr-credential-value" id="qr-modal-pass">boostnet2026</span>
+                            <button class="qr-copy-btn" id="btn-copy-pass">Copy</button>
+                        </div>
+                    </div>
+                    <div class="qr-credential-row" id="row-session-pin" style="display: none;">
+                        <span class="qr-credential-label">Session PIN</span>
+                        <div class="qr-credential-val-group">
+                            <span class="qr-credential-value" id="qr-modal-pin" style="color: var(--accent-emerald); font-weight: 700;">bn_demo_84920481</span>
+                            <button class="qr-copy-btn" id="btn-copy-pin">Copy</button>
+                        </div>
+                    </div>
+                    <div class="qr-credential-row" id="row-pairing-uri" style="display: none;">
+                        <span class="qr-credential-label">App URI</span>
+                        <div class="qr-credential-val-group">
+                            <code class="qr-credential-value" id="qr-modal-uri" style="font-size: 0.68rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">boostnet://pair?...</code>
+                            <button class="qr-copy-btn" id="btn-copy-uri">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Instruction Banner -->
+                <div class="qr-instruction-banner" id="qr-instruction-banner">
+                    ⚡ <strong>Camera Auto-Connect:</strong> Open your Motorola / Android camera or Google Lens and point it at the QR code to auto-connect to the Wi-Fi hotspot in 1 tap without typing passwords.
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-secondary modal-close-btn">Close</button>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.72rem; color: var(--text-muted);">UN SDG 9 Mobile-First Hotspot</span>
+                <button class="btn-primary modal-close-btn" style="padding: 7px 18px; font-size: 0.8rem;">Done</button>
             </div>
         </div>
     </div>
@@ -1640,11 +1849,25 @@ class BoostNetApp {
             });
         }
 
-        // QR Pairing Modal
+        // QR Pairing Modal & Tabs
         const qrBtn = document.getElementById("btn-pairing-qr");
         if (qrBtn) {
             qrBtn.addEventListener("click", () => this.openQrModal());
         }
+
+        const tabWifiBtn = document.getElementById("tab-btn-wifi");
+        const tabAppBtn = document.getElementById("tab-btn-app");
+        if (tabWifiBtn) tabWifiBtn.addEventListener("click", () => this.switchQrTab("wifi"));
+        if (tabAppBtn) tabAppBtn.addEventListener("click", () => this.switchQrTab("app"));
+
+        const copySsidBtn = document.getElementById("btn-copy-ssid");
+        const copyPassBtn = document.getElementById("btn-copy-pass");
+        const copyPinBtn = document.getElementById("btn-copy-pin");
+        const copyUriBtn = document.getElementById("btn-copy-uri");
+        if (copySsidBtn) copySsidBtn.addEventListener("click", (e) => this.copyText(document.getElementById("qr-modal-ssid")?.innerText || "BoostNet-College-Hotspot", e.target));
+        if (copyPassBtn) copyPassBtn.addEventListener("click", (e) => this.copyText(document.getElementById("qr-modal-pass")?.innerText || "boostnet2026", e.target));
+        if (copyPinBtn) copyPinBtn.addEventListener("click", (e) => this.copyText(document.getElementById("qr-modal-pin")?.innerText || "bn_demo_84920481", e.target));
+        if (copyUriBtn) copyUriBtn.addEventListener("click", (e) => this.copyText(this.pairingUri || "boostnet://pair?...", e.target));
 
         // Info / About Modal
         const aboutBtn = document.getElementById("btn-about");
@@ -1943,6 +2166,61 @@ class BoostNetApp {
         }
     }
 
+    copyText(text, btnElement) {
+        if (!text) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).catch(() => {});
+        } else {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); } catch (e) {}
+            document.body.removeChild(ta);
+        }
+        if (btnElement) {
+            const orig = btnElement.innerText;
+            btnElement.innerText = "✓ Copied";
+            btnElement.classList.add("copied");
+            setTimeout(() => {
+                btnElement.innerText = orig;
+                btnElement.classList.remove("copied");
+            }, 1800);
+        }
+    }
+
+    switchQrTab(tab) {
+        this.currentQrTab = tab;
+        const imgEl = document.getElementById("qr-modal-image");
+        const statusEl = document.getElementById("qr-status-text");
+        const bannerEl = document.getElementById("qr-instruction-banner");
+        const tabWifi = document.getElementById("tab-btn-wifi");
+        const tabApp = document.getElementById("tab-btn-app");
+        const pinRow = document.getElementById("row-session-pin");
+        const uriRow = document.getElementById("row-pairing-uri");
+
+        if (tab === "wifi") {
+            if (tabWifi) tabWifi.classList.add("active");
+            if (tabApp) tabApp.classList.remove("active");
+            if (imgEl && this.qrWifiUrl) imgEl.src = this.qrWifiUrl;
+            if (statusEl) statusEl.innerText = "Camera: Auto-Connect Wi-Fi";
+            if (bannerEl) bannerEl.innerHTML = `⚡ <strong>Camera Auto-Connect:</strong> Open your Motorola / Android camera or Google Lens and point it at the QR code to auto-connect to the Wi-Fi hotspot in 1 tap without typing passwords.`;
+            if (pinRow) pinRow.style.display = "none";
+            if (uriRow) uriRow.style.display = "none";
+        } else {
+            if (tabApp) tabApp.classList.add("active");
+            if (tabWifi) tabWifi.classList.remove("active");
+            if (imgEl && this.qrPairUrl) imgEl.src = this.qrPairUrl;
+            const token = document.getElementById("qr-modal-pin")?.innerText || "bn_demo_84920481";
+            if (statusEl) statusEl.innerText = `PIN: ${token} (BoostNet App)`;
+            if (bannerEl) bannerEl.innerHTML = `📱 <strong>Donor Bonding:</strong> Open the BoostNet Android app on your phone and tap <em>Scan QR</em> to establish the 4G/5G proxy bridge.`;
+            if (pinRow) pinRow.style.display = "flex";
+            if (uriRow) uriRow.style.display = "flex";
+        }
+    }
+
     async openQrModal() {
         const imgEl = document.getElementById("qr-modal-image");
         const pinEl = document.getElementById("qr-modal-pin");
@@ -1953,7 +2231,8 @@ class BoostNetApp {
         if (pinEl) pinEl.innerText = "bn_demo_84920481";
         if (ssidEl) ssidEl.innerText = "BoostNet-College-Hotspot";
         if (passEl) passEl.innerText = "boostnet2026";
-        if (uriEl) uriEl.innerText = "boostnet://pair?token=bn_demo_84920481&host=192.168.137.1&port=9050";
+        this.pairingUri = "boostnet://pair?ssid=BoostNet-College-Hotspot&pass=boostnet2026&host=192.168.137.1&port=9051&token=bn_demo_84920481";
+        if (uriEl) uriEl.innerText = this.pairingUri;
 
         document.getElementById("qr-pairing-modal").classList.add("active");
 
@@ -1961,17 +2240,22 @@ class BoostNetApp {
             const res = await fetch("/api/v1/pairing-qr");
             if (res.ok) {
                 const data = await res.json();
-                if (imgEl && data.qr_image_data_url) {
-                    imgEl.src = data.qr_image_data_url;
-                }
+                if (data.qr_image_data_url) this.qrPairUrl = data.qr_image_data_url;
+                if (data.wifi_qr_image_data_url) this.qrWifiUrl = data.wifi_qr_image_data_url;
                 if (pinEl && data.session_token) pinEl.innerText = data.session_token;
                 if (ssidEl && data.ssid) ssidEl.innerText = data.ssid;
                 if (passEl && data.password) passEl.innerText = data.password;
-                if (uriEl && data.pairing_uri) uriEl.innerText = data.pairing_uri;
+                if (data.pairing_uri) {
+                    this.pairingUri = data.pairing_uri;
+                    if (uriEl) uriEl.innerText = data.pairing_uri;
+                }
             }
         } catch (e) {
             console.warn("Using demo QR pairing payload on cloud showcase");
         }
+
+        // Render initially active tab (default to 1-Tap Wi-Fi Join)
+        this.switchQrTab(this.currentQrTab || "wifi");
     }
 
     openNodeDetailsModal(nodeId) {

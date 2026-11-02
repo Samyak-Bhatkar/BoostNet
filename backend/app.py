@@ -109,6 +109,7 @@ class StartDownloadRequest(BaseModel):
 
 # --- Pairing & Registration Endpoints ---
 @app.get("/api/v1/pairing-qr")
+@app.get("/v1/pairing-qr")
 async def get_pairing_qr(ssid: Optional[str] = None, password: Optional[str] = None):
     """Generates the PairDrop-inspired pairing URI and dark-mode QR code."""
     laptop_ip = get_laptop_local_ip()
@@ -124,24 +125,37 @@ async def get_pairing_qr(ssid: Optional[str] = None, password: Optional[str] = N
     })
     pairing_uri = f"boostnet://pair?{params}"
 
-    # Render dark-mode friendly Emerald on Pure Black QR code
-    qr = qrcode.QRCode(box_size=8, border=2)
+    # Render high-contrast, camera-friendly QR codes compliant with ISO/IEC 18004
+    qr = qrcode.QRCode(box_size=10, border=4, error_correction=qrcode.constants.ERROR_CORRECT_M)
     qr.add_data(pairing_uri)
     qr.make(fit=True)
-    img = qr.make_image(fill_color="#10b981", back_color="#000000")
+    img = qr.make_image(fill_color="black", back_color="white")
 
     buf = io.BytesIO()
     img.save(buf, format="PNG")
     qr_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
 
+    # Also render instant 1-Tap Wi-Fi Hotspot QR
+    wifi_uri = f"WIFI:T:WPA;S:{use_ssid};P:{use_pass};;"
+    qr_wifi = qrcode.QRCode(box_size=10, border=4, error_correction=qrcode.constants.ERROR_CORRECT_M)
+    qr_wifi.add_data(wifi_uri)
+    qr_wifi.make(fit=True)
+    img_wifi = qr_wifi.make_image(fill_color="black", back_color="white")
+
+    buf_wifi = io.BytesIO()
+    img_wifi.save(buf_wifi, format="PNG")
+    wifi_qr_b64 = base64.b64encode(buf_wifi.getvalue()).decode("utf-8")
+
     return {
         "pairing_uri": pairing_uri,
+        "wifi_uri": wifi_uri,
         "ssid": use_ssid,
         "password": use_pass,
         "laptop_ip": laptop_ip,
         "control_port": CONTROL_PORT,
         "session_token": SESSION_TOKEN,
         "qr_image_data_url": f"data:image/png;base64,{qr_b64}",
+        "wifi_qr_image_data_url": f"data:image/png;base64,{wifi_qr_b64}",
     }
 
 

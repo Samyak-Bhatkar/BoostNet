@@ -794,6 +794,52 @@ table.session-table td {
     padding: 20px;
 }
 
+/* Modern Segmented Control / Tab Switcher */
+.qr-tab-nav {
+    display: flex;
+    background: var(--surface-2);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    gap: 4px;
+    border: 1px solid var(--border-subtle);
+}
+
+.qr-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.qr-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.qr-tab-btn.active {
+    background: var(--accent-emerald);
+    color: #050b14;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+}
+
+.qr-tab-btn svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+}
+
 .modal-qr-container {
     display: flex;
     flex-direction: column;
@@ -801,18 +847,133 @@ table.session-table td {
     margin-bottom: 16px;
 }
 
+/* High-Contrast White Card for ISO/IEC 18004 Standard QR Camera Detection */
 .qr-image-wrapper {
-    padding: 12px;
-    background: #000;
-    border: 2px solid var(--accent-emerald);
-    border-radius: 12px;
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.25);
+    border: 2px solid rgba(16, 185, 129, 0.4);
     margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.qr-image-wrapper:hover {
+    transform: scale(1.02);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 35px rgba(16, 185, 129, 0.45);
 }
 
 .qr-image-wrapper img {
-    width: 190px;
-    height: 190px;
+    width: 200px;
+    height: 200px;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Status Pill with Pulsing Dot */
+.qr-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: var(--accent-emerald);
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+}
+
+.qr-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    box-shadow: 0 0 8px var(--accent-emerald);
+    animation: pulse-dot 1.5s infinite;
+}
+
+/* Sleek Credential Card */
+.qr-credential-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.qr-credential-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.qr-credential-label {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.qr-credential-val-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qr-credential-value {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.qr-copy-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent-cyan);
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.qr-copy-btn:hover {
+    background: rgba(6, 182, 212, 0.25);
+    color: #fff;
+}
+
+.qr-copy-btn.copied {
+    color: var(--accent-emerald);
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Step-by-Step Instructions */
+.qr-instruction-banner {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(6, 182, 212, 0.06);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
 }
 
 .modal-footer {

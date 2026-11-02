@@ -52,11 +52,25 @@ class BoostNetApp {
             simBtn.addEventListener("click", () => this.toggleVirtualCluster());
         }
 
-        // QR Pairing Modal
+        // QR Pairing Modal & Tabs
         const qrBtn = document.getElementById("btn-pairing-qr");
         if (qrBtn) {
             qrBtn.addEventListener("click", () => this.openQrModal());
         }
+
+        const tabWifiBtn = document.getElementById("tab-btn-wifi");
+        const tabAppBtn = document.getElementById("tab-btn-app");
+        if (tabWifiBtn) tabWifiBtn.addEventListener("click", () => this.switchQrTab("wifi"));
+        if (tabAppBtn) tabAppBtn.addEventListener("click", () => this.switchQrTab("app"));
+
+        const copySsidBtn = document.getElementById("btn-copy-ssid");
+        const copyPassBtn = document.getElementById("btn-copy-pass");
+        const copyPinBtn = document.getElementById("btn-copy-pin");
+        const copyUriBtn = document.getElementById("btn-copy-uri");
+        if (copySsidBtn) copySsidBtn.addEventListener("click", (e) => this.copyText(document.getElementById("qr-modal-ssid")?.innerText || "BoostNet-College-Hotspot", e.target));
+        if (copyPassBtn) copyPassBtn.addEventListener("click", (e) => this.copyText(document.getElementById("qr-modal-pass")?.innerText || "boostnet2026", e.target));
+        if (copyPinBtn) copyPinBtn.addEventListener("click", (e) => this.copyText(document.getElementById("qr-modal-pin")?.innerText || "bn_demo_84920481", e.target));
+        if (copyUriBtn) copyUriBtn.addEventListener("click", (e) => this.copyText(this.pairingUri || "boostnet://pair?...", e.target));
 
         // Info / About Modal
         const aboutBtn = document.getElementById("btn-about");
@@ -342,6 +356,61 @@ class BoostNetApp {
         }
     }
 
+    copyText(text, btnElement) {
+        if (!text) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).catch(() => {});
+        } else {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); } catch (e) {}
+            document.body.removeChild(ta);
+        }
+        if (btnElement) {
+            const orig = btnElement.innerText;
+            btnElement.innerText = "✓ Copied";
+            btnElement.classList.add("copied");
+            setTimeout(() => {
+                btnElement.innerText = orig;
+                btnElement.classList.remove("copied");
+            }, 1800);
+        }
+    }
+
+    switchQrTab(tab) {
+        this.currentQrTab = tab;
+        const imgEl = document.getElementById("qr-modal-image");
+        const statusEl = document.getElementById("qr-status-text");
+        const bannerEl = document.getElementById("qr-instruction-banner");
+        const tabWifi = document.getElementById("tab-btn-wifi");
+        const tabApp = document.getElementById("tab-btn-app");
+        const pinRow = document.getElementById("row-session-pin");
+        const uriRow = document.getElementById("row-pairing-uri");
+
+        if (tab === "wifi") {
+            if (tabWifi) tabWifi.classList.add("active");
+            if (tabApp) tabApp.classList.remove("active");
+            if (imgEl && this.qrWifiUrl) imgEl.src = this.qrWifiUrl;
+            if (statusEl) statusEl.innerText = "Camera: Auto-Connect Wi-Fi";
+            if (bannerEl) bannerEl.innerHTML = `⚡ <strong>Camera Auto-Connect:</strong> Open your Motorola / Android camera or Google Lens and point it at the QR code to auto-connect to the Wi-Fi hotspot in 1 tap without typing passwords.`;
+            if (pinRow) pinRow.style.display = "none";
+            if (uriRow) uriRow.style.display = "none";
+        } else {
+            if (tabApp) tabApp.classList.add("active");
+            if (tabWifi) tabWifi.classList.remove("active");
+            if (imgEl && this.qrPairUrl) imgEl.src = this.qrPairUrl;
+            const token = document.getElementById("qr-modal-pin")?.innerText || "bn_demo_84920481";
+            if (statusEl) statusEl.innerText = `PIN: ${token} (BoostNet App)`;
+            if (bannerEl) bannerEl.innerHTML = `📱 <strong>Donor Bonding:</strong> Open the BoostNet Android app on your phone and tap <em>Scan QR</em> to establish the 4G/5G proxy bridge.`;
+            if (pinRow) pinRow.style.display = "flex";
+            if (uriRow) uriRow.style.display = "flex";
+        }
+    }
+
     async openQrModal() {
         const imgEl = document.getElementById("qr-modal-image");
         const pinEl = document.getElementById("qr-modal-pin");
@@ -352,7 +421,8 @@ class BoostNetApp {
         if (pinEl) pinEl.innerText = "bn_demo_84920481";
         if (ssidEl) ssidEl.innerText = "BoostNet-College-Hotspot";
         if (passEl) passEl.innerText = "boostnet2026";
-        if (uriEl) uriEl.innerText = "boostnet://pair?token=bn_demo_84920481&host=192.168.137.1&port=9050";
+        this.pairingUri = "boostnet://pair?ssid=BoostNet-College-Hotspot&pass=boostnet2026&host=192.168.137.1&port=9051&token=bn_demo_84920481";
+        if (uriEl) uriEl.innerText = this.pairingUri;
 
         document.getElementById("qr-pairing-modal").classList.add("active");
 
@@ -360,17 +430,22 @@ class BoostNetApp {
             const res = await fetch("/api/v1/pairing-qr");
             if (res.ok) {
                 const data = await res.json();
-                if (imgEl && data.qr_image_data_url) {
-                    imgEl.src = data.qr_image_data_url;
-                }
+                if (data.qr_image_data_url) this.qrPairUrl = data.qr_image_data_url;
+                if (data.wifi_qr_image_data_url) this.qrWifiUrl = data.wifi_qr_image_data_url;
                 if (pinEl && data.session_token) pinEl.innerText = data.session_token;
                 if (ssidEl && data.ssid) ssidEl.innerText = data.ssid;
                 if (passEl && data.password) passEl.innerText = data.password;
-                if (uriEl && data.pairing_uri) uriEl.innerText = data.pairing_uri;
+                if (data.pairing_uri) {
+                    this.pairingUri = data.pairing_uri;
+                    if (uriEl) uriEl.innerText = data.pairing_uri;
+                }
             }
         } catch (e) {
             console.warn("Using demo QR pairing payload on cloud showcase");
         }
+
+        // Render initially active tab (default to 1-Tap Wi-Fi Join)
+        this.switchQrTab(this.currentQrTab || "wifi");
     }
 
     openNodeDetailsModal(nodeId) {

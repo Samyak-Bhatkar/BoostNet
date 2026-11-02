@@ -5,7 +5,7 @@ and app.js with instant Cloud Demo mode and mobile setup guide.
 """
 
 from pathlib import Path
-from api.index import DEMO_QR_DATA_URL
+from api.index import DEMO_QR_DATA_URL, DEMO_WIFI_QR
 
 ROOT = Path(r"c:\SAMYAKFILES\Users\AppData\Local\Programs\DATA SCIENCE COURSE\BoostNet")
 FRONTEND_DIR = ROOT / "frontend"
@@ -544,32 +544,80 @@ html_markup = f"""<!DOCTYPE html>
         </div>
     </div>
 
-    <!-- QR Code Pairing Modal (PairDrop Style) -->
+    <!-- QR Code Pairing Modal (World-Class PairDrop Experience) -->
     <div class="modal-overlay" id="qr-pairing-modal">
-        <div class="modal-card">
+        <div class="modal-card" style="max-width: 460px;">
             <div class="modal-header">
-                <h3>Pair Android Phone</h3>
+                <div>
+                    <h3 style="margin-bottom: 2px;">Pair Android Phone</h3>
+                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0;">Zero-Config 4G/5G Bandwidth Bonding</p>
+                </div>
                 <button class="icon-btn modal-close-btn" style="width: 32px; height: 32px;">✕</button>
             </div>
             <div class="modal-body">
+                <!-- Segmented Control Tabs -->
+                <div class="qr-tab-nav">
+                    <button class="qr-tab-btn active" id="tab-btn-wifi">
+                        <svg viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.81 0 7.27 1.49 9.87 3.91L12 19.33 2.13 11.41C4.73 8.99 8.19 7.5 12 7.5z"/></svg>
+                        1-Tap Wi-Fi Join
+                    </button>
+                    <button class="qr-tab-btn" id="tab-btn-app">
+                        <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                        BoostNet App
+                    </button>
+                </div>
+
+                <!-- High-Contrast Decodable QR Display Container -->
                 <div class="modal-qr-container">
                     <div class="qr-image-wrapper">
-                        <img id="qr-modal-image" src="{DEMO_QR_DATA_URL}" alt="Pairing QR Code"/>
+                        <img id="qr-modal-image" src="{DEMO_WIFI_QR}" alt="Pairing QR Code"/>
                     </div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-emerald);">
-                        Session PIN: <span id="qr-modal-pin">8f4a2e</span>
+                    <div class="qr-status-pill">
+                        <span class="qr-pulse-dot"></span>
+                        <span id="qr-status-text">Camera Scan: Auto-Connect Wi-Fi</span>
                     </div>
                 </div>
-                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; background: var(--surface-2); padding: 12px; border-radius: 8px;">
-                    <div><strong>Wi-Fi SSID:</strong> <span id="qr-modal-ssid">BoostNet_Hotspot</span></div>
-                    <div><strong>Password:</strong> <span id="qr-modal-pass">boostnet2026</span></div>
-                    <div style="margin-top: 6px; font-size: 0.72rem; color: var(--text-muted); word-break: break-all;">
-                        URI: <code id="qr-modal-uri">boostnet://pair?...</code>
+
+                <!-- Hotspot & Pairing Credentials Card with 1-Click Copy -->
+                <div class="qr-credential-card">
+                    <div class="qr-credential-row">
+                        <span class="qr-credential-label">Wi-Fi SSID</span>
+                        <div class="qr-credential-val-group">
+                            <span class="qr-credential-value" id="qr-modal-ssid">BoostNet-College-Hotspot</span>
+                            <button class="qr-copy-btn" id="btn-copy-ssid">Copy</button>
+                        </div>
                     </div>
+                    <div class="qr-credential-row">
+                        <span class="qr-credential-label">Hotspot Password</span>
+                        <div class="qr-credential-val-group">
+                            <span class="qr-credential-value" id="qr-modal-pass">boostnet2026</span>
+                            <button class="qr-copy-btn" id="btn-copy-pass">Copy</button>
+                        </div>
+                    </div>
+                    <div class="qr-credential-row" id="row-session-pin" style="display: none;">
+                        <span class="qr-credential-label">Session PIN</span>
+                        <div class="qr-credential-val-group">
+                            <span class="qr-credential-value" id="qr-modal-pin" style="color: var(--accent-emerald); font-weight: 700;">bn_demo_84920481</span>
+                            <button class="qr-copy-btn" id="btn-copy-pin">Copy</button>
+                        </div>
+                    </div>
+                    <div class="qr-credential-row" id="row-pairing-uri" style="display: none;">
+                        <span class="qr-credential-label">App URI</span>
+                        <div class="qr-credential-val-group">
+                            <code class="qr-credential-value" id="qr-modal-uri" style="font-size: 0.68rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">boostnet://pair?...</code>
+                            <button class="qr-copy-btn" id="btn-copy-uri">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Instruction Banner -->
+                <div class="qr-instruction-banner" id="qr-instruction-banner">
+                    ⚡ <strong>Camera Auto-Connect:</strong> Open your Motorola / Android camera or Google Lens and point it at the QR code to auto-connect to the Wi-Fi hotspot in 1 tap without typing passwords.
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-secondary modal-close-btn">Close</button>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.72rem; color: var(--text-muted);">UN SDG 9 Mobile-First Hotspot</span>
+                <button class="btn-primary modal-close-btn" style="padding: 7px 18px; font-size: 0.8rem;">Done</button>
             </div>
         </div>
     </div>
